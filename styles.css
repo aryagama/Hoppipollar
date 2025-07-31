@@ -1,0 +1,853 @@
+:root {
+  --bg-color: #000;
+  --text-color: #fff;
+  --cursor-color: rgba(255, 255, 255, 0.3);
+  --cursor-active-color: rgba(255, 255, 255, 0.6);
+  --logo-filter: none;
+  --accent-color: #fff;
+}
+
+[data-theme="light"] {
+  --bg-color: #f0f0f0;
+  --text-color: #333;
+  --cursor-color: rgba(0, 0, 0, 0.2);
+  --cursor-active-color: rgba(0, 0, 0, 0.4);
+  --logo-filter: invert(1);
+}
+
+/* Mood color schemes */
+[data-mood="default"] {
+  --bg-color: #000;
+  --text-color: #fff;
+  --accent-color: #FF007C;
+  var(--logo-filter):none;
+;
+}
+
+[data-mood="black"] {
+  --bg-color: #fff;
+  --text-color: #000;
+  --accent-color: #FF007C;
+  --logo-filter: invert(0);
+
+}
+
+[data-mood="pink"] {
+  --bg-color: #ff0280;
+  --text-color: #fff;
+  --accent-color: #240034;
+  
+}
+
+[data-mood="purple"] {
+  --bg-color: #190230;
+  --text-color: #fff;
+  --accent-color: #FF007C;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  height: 100vh;
+  font-family: "roboto-mono", monospace, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--text-color);
+  transition: background-color 0.5s ease, color 0.5s ease;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Only show custom cursor for non-touch devices */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
+/* Header Design */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+  padding: 20px 0;
+}
+
+.header-left {
+  margin-left: 20px;
+  pointer-events: auto;
+}
+
+.header-tagline {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: monospace, sans-serif;
+  transition: color 0.3s ease;
+  line-height: 1.2;
+  text-align: left;
+}
+
+@media (pointer: fine) {
+  .header-tagline {
+    cursor: none;
+  }
+}
+
+.header-tagline:hover {
+  color: var(--accent-color);
+}
+
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.header-logo {
+  height: 120px;
+  width: auto;
+  filter: var(--logo-filter);
+  transition: filter 0.5s ease;
+}
+
+.header-right {
+  display: flex;
+  gap: 16px;
+  margin-right: 20px;
+  pointer-events: auto;
+}
+
+.header-nav {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+@media (pointer: fine) {
+  .header-nav {
+    cursor: none;
+  }
+}
+
+.header-nav:hover {
+  color: var(--accent-color);
+}
+
+.header-button {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-family: "griffith-gothic-condensed", sans-serif;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+}
+
+@media (pointer: fine) {
+  .header-button {
+    cursor: none;
+  }
+}
+
+.header-button:hover {
+  color: var(--accent-color);
+}
+
+/* Interactive Button Styles */
+.interactive-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.interactive-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
+}
+
+.interactive-button:hover::before {
+  left: 100%;
+}
+
+.interactive-button:active {
+  transform: scale(0.95);
+}
+
+/* Efek khusus untuk tombol kamera dan share */
+.camera-button, .share-button {
+  position: relative;
+  z-index: 1;
+}
+
+.camera-button::after, .share-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent-color);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.camera-button:hover::after, .share-button:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.camera-button:hover, .share-button:hover {
+  color: var(--bg-color);
+}
+
+/* Efek untuk tombol header */
+.header-nav.interactive-button {
+  padding: 5px 0;
+}
+
+.header-nav.interactive-button::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 1px;
+  background: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.header-nav.interactive-button:hover::after {
+  width: 100%;
+}
+
+/* Efek untuk tombol close */
+.close-button, .close-preview {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.close-button:hover, .close-preview:hover {
+  transform: rotate(90deg);
+  color: var(--accent-color);
+}
+
+/* Efek untuk tombol zoom */
+.zoom-button {
+  transition: all 0.3s ease;
+}
+
+.zoom-button:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  transform: scale(1.1);
+}
+
+.zoom-button:active {
+  transform: scale(0.9);
+}
+
+/* Efek khusus untuk header tagline */
+.header-tagline {
+  position: relative;
+  display: inline-block;
+}
+
+.header-tagline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.header-tagline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.drop-moment-line2 {
+  position: relative;
+}
+
+.drop-moment-line2::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease 0.1s;
+}
+
+.header-tagline:hover .drop-moment-line2::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 50vh;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.video-background video.active {
+  opacity: 1;
+}
+
+.scroll-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.struk-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 5000px;
+  min-height: 5000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  pointer-events: none;
+  z-index: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.struk {
+  width: 150px;
+  height: auto;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+  transform-origin: center;
+  pointer-events: auto;
+  loading: lazy;
+}
+
+/* Buat Custom Cursor Styles - Only for non-touch devices */
+@media (pointer: fine) {
+  .cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--text-color);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+  }
+
+  .cursor-follower {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: var(--text-color);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    mix-blend-mode: difference;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .cursor.active {
+    transform: translate(-50%, -50%) scale(0.5);
+    border-color: var(--cursor-active-color);
+  }
+
+  .cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    background-color: var(--text-color);
+  }
+
+  .cursor-text {
+    position: fixed;
+    color: var(--text-color);
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(15px, -50%);
+    z-index: 1001;
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cursor-text.active {
+    opacity: 1;
+  }
+  
+  /* Ensure cursor appears over all modals */
+  .modal, .camera-modal, .preview-modal {
+    cursor: none;
+  }
+  
+  /* Style for interactive elements in modals */
+  .close-button, .camera-button, .share-button, .close-preview, #file-input-label {
+    cursor: none;
+  }
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 80%;
+  border: 1px solid var(--text-color);
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 3001;
+}
+
+@media (pointer: fine) {
+  .close-button {
+    cursor: none;
+  }
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.zoom-button {
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (pointer: fine) {
+  .zoom-button {
+    cursor: none;
+  }
+}
+
+/* Preview Struk Styles */
+.preview-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3100;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.preview-modal.active {
+  opacity: 1;
+  display: flex;
+}
+
+.preview-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+.preview-content {
+  position: relative;
+  max-width: 80%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 3101;
+}
+
+.preview-modal.active .preview-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  margin-bottom: 20px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
+}
+
+.preview-modal.active .preview-image {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.share-button {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  padding: 10px 20px;
+  font-family: "griffith-gothic-condensed", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+}
+
+@media (pointer: fine) {
+  .share-button {
+    cursor: none;
+  }
+}
+
+.preview-modal.active .share-button {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.close-preview {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 3102;
+}
+
+@media (pointer: fine) {
+  .close-preview {
+    cursor: none;
+  }
+}
+
+/* Camera styles */
+.camera-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.camera-container {
+  position: relative;
+  width: 80%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+#camera-view {
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--text-color);
+  border-radius: 5px;
+  display: none;
+}
+
+#camera-result {
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--text-color);
+  border-radius: 5px;
+  display: none;
+}
+
+.camera-canvas {
+  display: none;
+}
+
+.camera-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.camera-button {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  padding: 10px 20px;
+  font-family: "griffith-gothic-condensed", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+@media (pointer: fine) {
+  .camera-button {
+    cursor: none;
+  }
+}
+
+#file-input {
+  display: none;
+}
+
+/* Style for file input label */
+#file-input-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  font-family: "griffith-gothic-condensed", sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#file-input-label:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+/* Drop moment button styles */
+.drop-moment-text {
+  display: block;
+  line-height: 1.2;
+}
+
+.drop-moment-line1 {
+  font-size: 0.8rem;
+}
+
+.drop-moment-line2 {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Fallback for mix-blend-mode */
+@supports not (mix-blend-mode: difference) {
+  .cursor,
+  .cursor-follower,
+  .cursor-text {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Tambahkan style khusus untuk mobile di sini */
+  body {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  /* Contoh lainnya */
+}
+
+/* Add to your existing styles.css */
+
+/* Search Modal Styles */
+.search-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 3200;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.search-modal.active {
+  opacity: 1;
+  display: flex;
+}
+
+.search-content {
+  background-color: var(--bg-color);
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  border: 1px solid var(--text-color);
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+
+.search-modal.active .search-content {
+  transform: translateY(0);
+}
+
+.search-bar {
+  display: flex;
+  margin: 20px 0;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  font-family: "roboto-mono", monospace;
+}
+
+#searchButton {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  font-family: "roboto-mono", monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#searchButton:hover {
+  opacity: 0.8;
+}
+
+.search-results {
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+
+.receipt-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.receipt-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.close-search {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.close-search:hover {
+  transform: rotate(90deg);
+  color: var(--accent-color);
+}

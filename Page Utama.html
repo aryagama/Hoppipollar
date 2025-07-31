@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alternative Stage</title>
+  <link rel="stylesheet" href="https://use.typekit.net/your-kit-id.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header Layout -->
+  <header class="header">
+    <div class="header-left">
+      <p class="header-tagline interactive-button" id="dropMomentBtn">
+        <span class="drop-moment-text drop-moment-line1">LET'S DROP A</span>
+        <span class="drop-moment-text drop-moment-line2">MICRO MOMENT.</span>
+      </p>
+    </div>
+    
+    <div class="header-center">
+      <img src="IMG/Logo Alternative Stage WH.png" alt="Alternative Stage Logo" class="header-logo">
+    </div>
+    
+    <div class="header-right">
+      <span class="header-nav interactive-button" id="infoBtn">INFO</span>
+      <span class="header-nav interactive-button" id="moodBtn">MOOD</span>
+    </div>
+  </header>
+
+  <!-- Mood Options -->
+  <div class="mood-options" id="moodOptions">
+    <div class="mood-option" data-mood="default"></div>
+    <div class="mood-option" data-mood="black"></div>
+    <div class="mood-option" data-mood="pink"></div>
+    <div class="mood-option" data-mood="purple"></div>
+  </div>
+
+  <!-- Info Modal -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <button class="close-button interactive-button" id="closeModal" aria-label="Close modal">&times;</button>
+      <h2>ALTERNATIVE STAGE</h2>
+      <p>Microgram @ Pestapora 2025</p>
+      <p>Tiny sounds with bold presence.</p>
+      <p>Sept 5-7 · Gambir Expo, Jakarta</p>
+      <p>Find us at the Alternative Stage.</p>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-modal" id="searchModal">
+    <div class="search-content">
+      <button class="close-search interactive-button" id="closeSearch" aria-label="Close search">&times;</button>
+      <h2>FIND YOUR RECEIPT</h2>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search by receipt name...">
+        <button id="searchButton">SEARCH</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- Receipt Preview Modal -->
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-content">
+      <button class="close-preview interactive-button" id="closePreview" aria-label="Close preview">&times;</button>
+      <img id="previewImage" class="preview-image" src="" alt="Preview Receipt">
+      <button class="share-button interactive-button" id="shareButton" aria-label="Share image">SHARE</button>
+    </div>
+  </div>
+
+  <!-- Video Background -->
+  <div class="video-background">
+    <video loop muted autoplay class="active">
+      <source src="VID/ALT VID 1.mp4" type="video/mp4">
+    </video>
+    <video loop muted autoplay>
+      <source src="VID/ALT STAGE 1.mp4" type="video/mp4">
+    </video>
+    <video loop muted autoplay>
+      <source src="VID/ALT VID 3.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Main Content -->
+  <div class="scroll-container" id="scrollContainer">
+    <div class="struk-container" id="strukContainer"></div>
+  </div>
+  
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+  <div class="cursor-text" id="cursorText">VIEW</div>
+
+  <!-- Zoom Controls -->
+  <div class="zoom-controls">
+    <button class="zoom-button interactive-button" id="zoomIn" aria-label="Zoom in">+</button>
+    <button class="zoom-button interactive-button" id="zoomOut" aria-label="Zoom out">-</button>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="AUD/Jingle Hyperpop.wav" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
