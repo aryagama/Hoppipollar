@@ -19,7 +19,7 @@
 [data-mood="default"] {
   --bg-color: #000;
   --text-color: #fff;
-  --accent-color: #FF007C;
+  --accent-color: #f1b643;
   var(--logo-filter):none;
 ;
 }
@@ -27,13 +27,13 @@
 [data-mood="black"] {
   --bg-color: #fff;
   --text-color: #000;
-  --accent-color: #FF007C;
+  --accent-color: #f1b643;
   --logo-filter: invert(0);
 
 }
 
 [data-mood="pink"] {
-  --bg-color: #ff0280;
+  --bg-color: #f1b643;
   --text-color: #fff;
   --accent-color: #240034;
   
@@ -42,7 +42,7 @@
 [data-mood="purple"] {
   --bg-color: #190230;
   --text-color: #fff;
-  --accent-color: #FF007C;
+  --accent-color: #f1b643;
 }
 
 body {
