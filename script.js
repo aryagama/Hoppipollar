@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('searchButton');
 
   // Mood settings
-  const moods = ['default', 'black', 'pink', 'purple'];
-  const moodLabels = ['DEFAULT', 'BLACK', 'PINK', 'PURPLE'];
+  const moods = ['default', 'black', 'yellow', 'purple'];
+  const moodLabels = ['DEFAULT', 'BLACK', 'YELLOW', 'PURPLE'];
   let currentMoodIndex = 0;
 
   // Initialize mood
