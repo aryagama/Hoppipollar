@@ -65,15 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { name: "Struk 1", file: 'Struk 1.png' },
     { name: "Struk 2", file: 'Struk 2.png' },
     { name: "Struk 4", file: 'Struk 4.png' },
-    { name: "Struk 5", file: 'Struk 5.png' },
-    { name: "Struk 6", file: 'Struk 6.png' },
-    { name: "Struk 7", file: 'Struk 7.png' },
-    { name: "Struk 8", file: 'Struk 8.png' },
-    { name: "Struk 10", file: 'Struk 10.png' },
-    { name: "Struk 11", file: 'Struk 11.png' },
-    { name: "Struk 12", file: 'Struk 12.png' },
-    { name: "Struk 13", file: 'Struk 13.png' },
-    { name: "Struk 14", file: 'Struk 14.png' }
   ];
 
   // Generate struks in a grid
