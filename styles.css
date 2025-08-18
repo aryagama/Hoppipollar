@@ -50,6 +50,7 @@ body {
   padding: 0;
   background-color: var(--bg-color);
   height: 100dvh;
+  min-height: -webkit-fill-available;
   font-family: "roboto-mono", monospace, sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -57,6 +58,15 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
   overflow: hidden;
   scroll-behavior: smooth;
+}
+
+.main-container {
+  min-height: 100dvh;
+  box-sizing: border-box;
+
+  /* Tambahin safe area khusus iOS */
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
 }
 
 /* Only show custom cursor for non-touch devices */
