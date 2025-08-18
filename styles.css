@@ -875,24 +875,25 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  background-color: #000;
+  background-color: #000; /* sama seperti tombol zoom */
 }
 
 .info-icon {
   font-family: "griffith-gothic-condensed", sans-serif;
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--text-color);
+  color: #fff; /* putih default */
   transition: all 0.3s ease;
 }
 
+
 .info-icon-container:hover .info-icon-circle {
-  background-color: var(--text-color);
+  background-color: #fff; /* jadi putih */
   transform: scale(1.1);
 }
 
 .info-icon-container:hover .info-icon {
-  color: var(--bg-color);
+  color: #000; /* teks jadi hitam */
 }
 
 /* Ensure cursor works with the new icon */
