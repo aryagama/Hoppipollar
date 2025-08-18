@@ -66,67 +66,6 @@ body {
   }
 }
 
-/* Header Design */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  pointer-events: none;
-  padding: 20px 0;
-}
-
-.header-left {
-  margin-left: 20px;
-  pointer-events: auto;
-}
-
-.header-tagline {
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin: 0;
-  font-family: monospace, sans-serif;
-  transition: color 0.3s ease;
-  line-height: 1.2;
-  text-align: left;
-}
-
-@media (pointer: fine) {
-  .header-tagline {
-    cursor: none;
-  }
-}
-
-.header-tagline:hover {
-  color: var(--accent-color);
-}
-
-.header-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: auto;
-}
-
-.header-logo {
-  height: 120px;
-  width: auto;
-  filter: var(--logo-filter);
-  transition: filter 0.5s ease;
-}
-
-.header-right {
-  display: flex;
-  gap: 16px;
-  margin-right: 20px;
-  pointer-events: auto;
-}
-
 .header-nav {
   font-size: 0.8rem;
   text-transform: uppercase;
