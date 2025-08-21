@@ -974,3 +974,125 @@ body {
     cursor: none;
   }
 }
+
+/* Logo Bumper ALT STAGE GIF di tengah layar */
+.overlay-gif {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  max-width: 80%;
+  max-height: 80%;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Animasi untuk logo bumper */
+@keyframes float {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+  }
+  33% { 
+    transform: translate(-50%, -52%) scale(1.02) rotate(0.5deg); 
+  }
+  66% { 
+    transform: translate(-50%, -48%) scale(0.98) rotate(-0.5deg); 
+  }
+}
+
+/* Efek pulsate untuk logo */
+@keyframes pulsate {
+  0%, 100% { 
+    opacity: 0.9;
+    filter: drop-shadow(0 0 15px rgba(241, 182, 67, 0.7));
+  }
+  50% { 
+    opacity: 1;
+    filter: drop-shadow(0 0 25px rgba(241, 182, 67, 0.9));
+  }
+}
+
+/* Style khusus untuk video background agar tidak mengganggu logo */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Di bawah logo */
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 50vh;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: brightness(0.7) contrast(1.2);
+}
+
+.video-background video.active {
+  opacity: 0.5; /* Lebih transparan agar logo lebih menonjol */
+}
+
+/* Memastikan logo terlihat baik di semua perangkat */
+@media (max-width: 768px) {
+  .overlay-gif {
+    max-width: 90%;
+    max-height: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .video-background video {
+    max-height: 40vh;
+    opacity: 0.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .overlay-gif {
+    max-width: 95%;
+    max-height: 45%;
+  }
+  
+  .video-background video {
+    max-height: 35vh;
+    opacity: 0.3;
+  }
+}
+
+/* Efek hover halus untuk logo */
+@media (pointer: fine) {
+  .overlay-gif:hover {
+    animation: pulsate 2s ease-in-out infinite, float 6s ease-in-out infinite;
+  }
+}
+
+/* Memastikan tidak ada elemen lain yang menutupi logo */
+.header, .info-icon-container, .zoom-controls {
+  z-index: 1000; /* Di atas logo */
+}
+
+.struk-container, .scroll-container {
+  z-index: 0; /* Di bawah logo */
+}
+
+/* Penyesuaian untuk modal agar tidak mengganggu logo */
+.modal, .search-modal, .preview-modal, .camera-modal {
+  z-index: 3000; /* Di atas logo saat modal aktif */
+}
+
+/* Memastikan cursor custom bekerja dengan logo */
+@media (pointer: fine) {
+  .overlay-gif {
+    pointer-events: none; /* Tidak mengganggu interaksi cursor */
+  }
+}
