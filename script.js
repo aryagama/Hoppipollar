@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Receipt data with names
   const strukFiles = [
-    { name: "Struk 1", file: 'Struk 1.png' },
+    { name: "Struk 1", file: 'Arya_another nothing.png' },
     { name: "Struk 2", file: 'Struk 2.png' },
     { name: "Struk 4", file: 'Struk 4.png' },
   ];
