@@ -49,8 +49,11 @@
 body {
   margin: 0;
   padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
   background-color: var(--bg-color);
-  height: 100dvh;
+  height: 100vh; /* fallback umum */
+  height: 100dvh; /* modern browsers */
+  min-height: -webkit-fill-available; /* safari lama */
   font-family: "roboto-mono", monospace, sans-serif;
   font-weight: 400;
   font-style: normal;
