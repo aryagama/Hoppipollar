@@ -5,13 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alternative Stage</title>
   <link rel="stylesheet" href="https://use.typekit.net/your-kit-id.css" />
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Favicon utama -->
   <link rel="icon" type="image/png" href="02. Microgram_logomark-broken white.png">
+
+  <!-- Opsional untuk iOS/Apple -->
   <link rel="apple-touch-icon" href="02. Microgram_logomark-broken white.png">
+
+  <!-- Opsional untuk berbagai ukuran -->
   <link rel="icon" type="image/png" sizes="32x32" href="02. Microgram_logomark-broken white.png">
   <link rel="icon" type="image/png" sizes="16x16" href="02. Microgram_logomark-broken white.png">
+  
+  <!-- Font Awesome untuk ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- ASCII Background Animation -->
+  <div class="ascii-background">
+    <pre class="ascii-content" id="asciiContent"></pre>
+  </div>
+
   <!-- Header Layout -->
   <header class="header">
     <div class="header-left">
@@ -33,7 +47,6 @@
     </div>
   </div>
 
-  <!-- Rest of your HTML remains the same -->
   <!-- Mood Options -->
   <div class="mood-options" id="moodOptions">
     <div class="mood-option" data-mood="default"></div>
@@ -51,10 +64,19 @@
       <p>Tiny sounds with bold presence.</p>
       <p>Sept 5-7 · Gambir Expo, Jakarta</p>
       <p>Find us at the Alternative Stage.</p>
+      
+      <!-- Social Media Icons -->
+      <div class="social-media-icons">
+        <a href="https://instagram.com/microgram.ent" target="_blank" class="social-icon">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://discord.gg/nRJGEAfC" target="_blank" class="social-icon">
+          <i class="fab fa-discord"></i>
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- Rest of your HTML remains unchanged -->
   <!-- Search Modal -->
   <div class="search-modal" id="searchModal">
     <div class="search-content">
@@ -114,4 +136,5 @@
 
   <script src="script.js"></script>
 </body>
+</html>
 </html>
