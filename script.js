@@ -262,8 +262,9 @@ moodBtn.textContent = `MOOD (${moodLabels[currentMoodIndex]})`;
 
 // Receipt data with names
 const strukFiles = [
-  { name: "Struk 1", file: 'Struk 1_Trial.png' },
-  { name: "Struk 2", file: 'Struk 2_Trial.png' },
+  { name: "Go Tiket Pestapora", file: 'Struk 1_Trial.png' },
+  { name: "Yukmaju", file: 'Struk 2_Trial.png' },
+  { name: "reichansepta", file: 'Struk 3_Trial.png' },
 ];
 
 // Generate struks in a grid
