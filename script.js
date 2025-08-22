@@ -232,7 +232,6 @@ const scrollContainer = document.getElementById('scrollContainer');
 const cursor = document.getElementById('cursor');
 const cursorFollower = document.getElementById('cursorFollower');
 const cursorText = document.getElementById('cursorText');
-const videos = document.querySelectorAll('.video-background video');
 const infoModal = document.getElementById('infoModal');
 const closeModal = document.getElementById('closeModal');
 const zoomInBtn = document.getElementById('zoomIn');
@@ -564,37 +563,6 @@ function fallbackShare(imageSrc, name) {
   
   // Alert user about the download
   alert(`"${name}" has been downloaded. You can now share it from your gallery.`);
-}
-
-// Video rotation
-let currentVideoIndex = 0;
-const videoPositions = [
-  { top: '30%', left: '20%' },
-  { top: '50%', left: '50%' },
-  { top: '70%', left: '80%' }
-];
-
-// Initialize video positions
-videos.forEach((video, index) => {
-  const position = videoPositions[index];
-  video.style.top = position.top;
-  video.style.left = position.left;
-  video.style.transform = 'translate(-50%, -50%)';
-  
-  // Handle video autoplay
-  video.play().catch(e => console.log('Autoplay prevented:', e));
-});
-
-function changeVideo() {
-  videos[currentVideoIndex].classList.remove('active');
-  currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-  const nextVideo = videos[currentVideoIndex];
-  nextVideo.classList.add('active');
-  setTimeout(changeVideo, 5000);
-}
-
-if (videos.length > 1) {
-  setTimeout(changeVideo, 5000);
 }
 
 // Info button functionality
