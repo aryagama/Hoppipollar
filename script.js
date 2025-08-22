@@ -265,6 +265,8 @@ const strukFiles = [
   { name: "Go Tiket Pestapora", file: 'Struk 1_Trial.png' },
   { name: "Yukmaju", file: 'Struk 2_Trial.png' },
   { name: "reichansepta", file: 'Struk 3_Trial.png' },
+  { name: "Noname", file: 'Struk 4.png' },
+  { name: "Lebah Qol", file: 'Struk 5.png' },
 ];
 
 // Generate struks in a grid
