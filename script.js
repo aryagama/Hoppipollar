@@ -267,6 +267,18 @@ const strukFiles = [
   { name: "reichansepta", file: 'Struk 3_Trial.png' },
   { name: "Noname", file: 'Struk 4.png' },
   { name: "Lebah Qol", file: 'Struk 5.png' },
+  { name: "The Skit", file: 'The Skit 1.png' },
+  { name: "Ze.Grave", file: 'Ze.Grave_STRUK.png' },
+  { name: "beth__", file: 'beth__ STRUK.png' },
+  { name: "dillah", file: 'dillah_STRUK.png' },
+  { name: "duck", file: 'duck_STRUK.png' },
+  { name: "gunawansaputra21", file: 'gunawansaputra21_STRUK.png' },
+  { name: "hankrayyy", file: 'hankrayyy_STRUK.png' },
+  { name: "lawliet15", file: 'lawliet15_STRUK.png' },
+  { name: "mykey", file: 'mykey_STRUK.png' },
+  { name: "ponarikeren", file: 'ponarikeren_STRUK.png' },
+  { name: "reichansepta", file: 'reichansepta_STRUK.png' },
+  
 ];
 
 // Generate struks in a grid
