@@ -278,6 +278,18 @@ const strukFiles = [
   { name: "mykey", file: 'mykey_STRUK.png' },
   { name: "ponarikeren", file: 'ponarikeren_STRUK.png' },
   { name: "reichansepta", file: 'reichansepta_STRUK.png' },
+  { name: "TOXICDEV", file: 'TOXICDEV 1.png' },
+  { name: "anakbaik", file: 'anakbaik_STRUK.png' },
+  { name: "WhiteChorus", file: 'WC_STRUK.png' },
+  { name: "Twentynineteens", file: 'TNT 1.png' },
+  { name: "THE SKIT", file: 'THE SKIT 2.png' },
+  { name: "UCUP", file: 'UCUP_STRUK.png' },
+  { name: "HARUM MANIS", file: 'HARUM MANIS 1.png' },
+  { name: "FANS YORI", file: 'FANS YORI_STRUK.png' },
+  { name: "UCUP", file: 'UCUP_STRUK.png' },
+  { name: "DODOL GARUT", file: 'DODOL GARUT_STRUK.png' },
+  { name: "COLORCODE", file: 'COLORCODE 1.png' },
+  { name: "ANTINRML", file: 'ANTINRML 1.png' },
   
 ];
 
