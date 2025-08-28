@@ -277,7 +277,7 @@ const strukFiles = [
   { name: "DODOL GARUT", file: 'DODOL GARUT_STRUK.png' },
   { name: "COLORCODE", file: 'COLORCODE 1.png' },
   { name: "ANTINRML", file: 'ANTINRML 1.png' },
-  { name: "FUFU CLAN", file: 'FUFU CLAN 1_STRUK.png' },
+  { name: "FUFU CLAN", file: 'FUFU CLAN 2_STRUK.png' },
   { name: "HARUM MANIS", file: 'HARUM MANIS_STRUK.png' },
   { name: "SUB", file: 'SUB 2_STRUK.png' },
   { name: "Re-NAN", file: 'Re-NAN 2_STRUK.png' },
