@@ -1,4 +1,3 @@
-// ========== [START: ASCII ANIMATION] ========== //
 document.addEventListener('DOMContentLoaded', function() {
   const asciiContent = `
 yes!no!\/oys!mo!/ysa\
@@ -168,16 +167,14 @@ const asciiElement = document.getElementById('asciiContent');
   asciiElement.textContent = asciiContent;
   
   let animationId;
-  let position = -asciiElement.scrollHeight; // Mulai dari atas (di luar viewport)
-  const speed = 0.7; // Kecepatan sedikit diperlambat
+  let position = -asciiElement.scrollHeight;
+  const speed = 0.7;
   
-  // Tunggu hingga elemen di-render sepenuhnya
   setTimeout(() => {
-    // Fungsi animasi ASCII
+  
     function animateAscii() {
       position += speed;
       
-      // Jika konten sudah melewati bawah layar, reset ke atas
       if (position > window.innerHeight) {
         position = -asciiElement.scrollHeight;
       }
@@ -186,10 +183,8 @@ const asciiElement = document.getElementById('asciiContent');
       animationId = requestAnimationFrame(animateAscii);
     }
     
-    // Mulai animasi ASCII
     animateAscii();
     
-    // Hentikan animasi saat tab tidak aktif untuk menghemat resources
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         cancelAnimationFrame(animationId);
@@ -200,10 +195,8 @@ const asciiElement = document.getElementById('asciiContent');
   }, 100);
 });
 
-// ========== [START: BACKGROUND MUSIC SETUP] ========== //
 const bgMusic = document.getElementById('bgMusic');
 
-// Fungsi untuk memutar audio setelah interaksi pengguna
 function enableAudio() {
   document.removeEventListener('click', enableAudio);
   document.removeEventListener('keydown', enableAudio);
@@ -219,14 +212,12 @@ function enableAudio() {
   }
 }
 
-// Aktifkan audio saat pengguna pertama kali berinteraksi
 document.addEventListener('click', enableAudio, { once: true });
 document.addEventListener('keydown', enableAudio, { once: true });
 document.addEventListener('touchstart', enableAudio, { once: true });
 
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-// Initialize elements
 const strukContainer = document.getElementById('strukContainer');
 const scrollContainer = document.getElementById('scrollContainer');
 const cursor = document.getElementById('cursor');
@@ -244,23 +235,19 @@ const infoBtn = document.getElementById('infoBtn');
 const moodBtn = document.getElementById('moodBtn');
 const dropMomentBtn = document.getElementById('dropMomentBtn');
 
-// Search elements
 const searchModal = document.getElementById('searchModal');
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 const closeSearch = document.getElementById('closeSearch');
 const searchButton = document.getElementById('searchButton');
 
-// Mood settings
 const moods = ['default', 'black', 'yellow', 'purple'];
 const moodLabels = ['DEFAULT', 'BLACK', 'YELLOW', 'PURPLE'];
 let currentMoodIndex = 0;
 
-// Initialize mood
 document.body.setAttribute('data-mood', moods[currentMoodIndex]);
 moodBtn.textContent = `MOOD (${moodLabels[currentMoodIndex]})`;
 
-// Receipt data with names
 const strukFiles = [
   { name: "Go Tiket Pestapora", file: 'Struk 1_Trial.png' },
   { name: "Yukmaju", file: 'Struk 2_Trial.png' },
@@ -290,21 +277,33 @@ const strukFiles = [
   { name: "DODOL GARUT", file: 'DODOL GARUT_STRUK.png' },
   { name: "COLORCODE", file: 'COLORCODE 1.png' },
   { name: "ANTINRML", file: 'ANTINRML 1.png' },
+  { name: "FUFU CLAN", file: 'FUFU CLAN 1_STRUK.png' },
+  { name: "HARUM MANIS", file: 'HARUM MANIS_STRUK.png' },
+  { name: "SUB", file: 'SUB 2_STRUK.png' },
+  { name: "Re-NAN", file: 'Re_NAN 2_STRUK.png' },
+  { name: "NISKALA", file: 'NISKALA 2_STRUK.png' },
+  { name: "MADMAX", file: 'MADMAX 2_STRUK.png' },
+  { name: "RERUNTUH", file: 'RERUNTUH_STRUK.png' },
+  { name: "SPLITZ", file: 'SPLITZ 2_STRUK.png' },
+  { name: "TWENTY NINE TEENS", file: 'TNT 2_STRUK.png' },
+  { name: "TRIPOV", file: 'TRIPOV 2_STRUK.png' },
+  { name: "WHITE CHORUS", file: 'WC 2_STRUK.png' },
+  { name: "FUFU CLAN", file: 'FUFU CLAN 2_STRUK.png' },
+  { name: "BABA", file: 'BABA_STRUK.png' },
+  { name: "ANTINRML", file: 'ANTINRML1_STRUK.png' },
+  
   
 ];
 
-// Generate struks in a grid
 const strukWidth = 150;
 const gap = 20;
 const gridSize = 5000;
 const cols = Math.ceil(gridSize / (strukWidth + gap));
 const rows = Math.ceil(gridSize / (strukWidth + gap));
 
-// Store all struk elements and their initial positions
 const struks = [];
-let isHovering = false; // Track hover state for cursor
+let isHovering = false;
 
-// Function to create struk elements
 function createStruk(i, j) {
   const struk = document.createElement('img');
   struk.className = 'struk';
@@ -313,8 +312,7 @@ function createStruk(i, j) {
   struk.alt = randomStruk.name;
   struk.loading = 'lazy';
   const randomRotation = Math.random() * 20 - 10;
-  
-  // Store initial position and rotation
+
   const strukObj = {
     element: struk,
     baseX: j * (strukWidth + gap),
@@ -330,7 +328,6 @@ function createStruk(i, j) {
   return strukObj;
 }
 
-// Create struks in batches for better performance
 function createStruksBatch() {
   const batchSize = 50;
   let i = 0, j = 0;
@@ -349,7 +346,6 @@ function createStruksBatch() {
     if (i < rows) {
       requestAnimationFrame(processBatch);
     } else {
-      // Center the scroll after all struks are loaded
       scrollContainer.scrollTo(gridSize/2 - window.innerWidth/2, gridSize/2 - window.innerHeight/2);
     }
   }
@@ -359,7 +355,6 @@ function createStruksBatch() {
 
 createStruksBatch();
 
-// Zoom functionality
 let scale = 1;
 const minScale = 0.3;
 const maxScale = 2;
@@ -379,7 +374,6 @@ zoomOutBtn.addEventListener('click', () => {
   updateZoom();
 });
 
-// Handle mouse wheel for zoom
 scrollContainer.addEventListener('wheel', (e) => {
   if (e.ctrlKey) {
     e.preventDefault();
@@ -393,23 +387,19 @@ scrollContainer.addEventListener('wheel', (e) => {
   }
 }, { passive: false });
 
-// Custom cursor movement (only for non-touch devices)
 if (!isTouchDevice) {
   let mouseX = 0, mouseY = 0;
   let followerX = 0, followerY = 0;
 
   function animateCursor() {
-    // Main cursor (small circle)
     cursor.style.left = mouseX + 'px';
     cursor.style.top = mouseY + 'px';
     
-    // Follower cursor (larger circle with delay)
     followerX += (mouseX - followerX) * 0.2;
     followerY += (mouseY - followerY) * 0.2;
     cursorFollower.style.left = followerX + 'px';
     cursorFollower.style.top = followerY + 'px';
     
-    // Cursor text position
     cursorText.style.left = mouseX + 'px';
     cursorText.style.top = mouseY + 'px';
     
@@ -418,7 +408,6 @@ if (!isTouchDevice) {
 
   animateCursor();
 
-  // Track mouse position
   document.addEventListener('mousemove', function (e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
@@ -429,7 +418,6 @@ if (!isTouchDevice) {
     let activeStruk = null;
     let minDistance = Infinity;
 
-    // Find the closest struk to cursor
     struks.forEach(strukObj => {
       const struk = strukObj.element;
       const rect = struk.getBoundingClientRect();
@@ -440,7 +428,6 @@ if (!isTouchDevice) {
         Math.pow(scrollY - centerY, 2)
       );
 
-      // Only activate if cursor is within 200px of struk center
       if (distance < 200) {
         if (distance < minDistance) {
           minDistance = distance;
@@ -449,7 +436,6 @@ if (!isTouchDevice) {
       }
     });
 
-    // Apply effects to all struks
     struks.forEach(strukObj => {
       const struk = strukObj.element;
       const rect = struk.getBoundingClientRect();
@@ -461,12 +447,11 @@ if (!isTouchDevice) {
       );
 
       if (strukObj === activeStruk) {
-        // For the closest struk - follow cursor and scale up
         const followAmount = 0.2;
         const targetX = strukObj.baseX + (e.clientX - centerX) * followAmount;
         const targetY = strukObj.baseY + (e.clientY - centerY) * followAmount;
         
-        const scaleAmount = 1.5 - (distance / 200) * 0.5; // Scale up to 1.5x
+        const scaleAmount = 1.5 - (distance / 200) * 0.5;
         
         struk.style.transform = `
           translate(${targetX}px, ${targetY}px)
@@ -475,14 +460,13 @@ if (!isTouchDevice) {
         `;
         struk.style.zIndex = '10';
         
-        // Update cursor state
         cursor.classList.add('hover');
         cursorFollower.style.width = '30px';
         cursorFollower.style.height = '30px';
         cursorText.classList.add('active');
         isHovering = true;
       } else {
-        // For other struks - return to original position
+        
         struk.style.transform = `
           translate(${strukObj.baseX}px, ${strukObj.baseY}px)
           rotate(${strukObj.rotation}deg)
@@ -492,7 +476,6 @@ if (!isTouchDevice) {
       }
     });
 
-    // Reset cursor if not hovering over any struk
     if (!activeStruk && isHovering) {
       cursor.classList.remove('hover');
       cursorFollower.style.width = '10px';
@@ -514,7 +497,6 @@ if (!isTouchDevice) {
     cursorFollower.style.height = isHovering ? '30px' : '10px';
   });
   
-  // Add cursor effects to modal elements (including dropMomentBtn)
   const modalInteractiveElements = [
     closeModal, zoomInBtn, zoomOutBtn, closePreview, shareButton,
     infoBtn, moodBtn, dropMomentBtn, closeSearch, searchButton
@@ -539,7 +521,6 @@ if (!isTouchDevice) {
   });
 }
 
-// Click handler for struks to show preview
 struks.forEach(strukObj => {
   strukObj.element.addEventListener('click', (e) => {
     e.preventDefault();
@@ -547,12 +528,10 @@ struks.forEach(strukObj => {
     previewModal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Force reflow to trigger animation
     void previewModal.offsetWidth;
   });
 });
 
-// Close preview modal
 closePreview.addEventListener('click', () => {
   previewModal.classList.remove('active');
   setTimeout(() => {
@@ -560,7 +539,6 @@ closePreview.addEventListener('click', () => {
   }, 500);
 });
 
-// Enhanced share functionality with receipt name
 shareButton.addEventListener('click', () => {
   const strukObj = struks.find(s => s.src === previewImage.src);
   const strukName = strukObj?.name || "My Receipt";
@@ -580,7 +558,6 @@ shareButton.addEventListener('click', () => {
 });
 
 function fallbackShare(imageSrc, name) {
-  // Create a temporary link for download
   const link = document.createElement('a');
   link.href = imageSrc;
   link.download = `alternative-stage-${name.replace(/\s+/g, '-').toLowerCase()}.png`;
@@ -588,11 +565,9 @@ function fallbackShare(imageSrc, name) {
   link.click();
   document.body.removeChild(link);
   
-  // Alert user about the download
   alert(`"${name}" has been downloaded. You can now share it from your gallery.`);
 }
 
-// Info button functionality
 infoBtn.addEventListener('click', () => {
   infoModal.style.display = 'flex';
 });
@@ -607,40 +582,31 @@ window.addEventListener('click', (e) => {
   }
 });
 
-// Mood button functionality - single click cycle through moods
 moodBtn.addEventListener('click', () => {
-  // Cycle to next mood
   currentMoodIndex = (currentMoodIndex + 1) % moods.length;
   
-  // Apply new mood
   document.body.setAttribute('data-mood', moods[currentMoodIndex]);
   
-  // Update button text
   moodBtn.textContent = `MOOD (${moodLabels[currentMoodIndex]})`;
 });
 
-// ========== [START: SEARCH FUNCTIONALITY] ========== //
-// Open search modal when clicking "Let's drop a micro moment"
 dropMomentBtn.addEventListener('click', () => {
   searchModal.classList.add('active');
   document.body.style.overflow = 'hidden';
   searchInput.focus();
-  searchReceipts(''); // Show all receipts initially
+  searchReceipts('');
 });
 
-// Close search modal
 closeSearch.addEventListener('click', () => {
   searchModal.classList.remove('active');
   document.body.style.overflow = '';
 });
 
-// Search function
 function searchReceipts(query) {
   searchResults.innerHTML = '';
   const normalizedQuery = query.toLowerCase().trim();
   
   if (!normalizedQuery) {
-    // Show all receipts if search is empty
     strukFiles.forEach((struk, index) => {
       addReceiptToSearchResults(struk, index);
     });
@@ -676,39 +642,32 @@ function addReceiptToSearchResults(struk, index) {
 }
 
 function highlightReceipt(filePath) {
-  // Find the struk in the grid
   const strukObj = struks.find(s => s.src === filePath);
   if (strukObj) {
-    // Scroll to the struk
     scrollContainer.scrollTo({
       left: strukObj.baseX - window.innerWidth/2 + strukWidth/2,
       top: strukObj.baseY - window.innerHeight/2 + strukWidth/2,
       behavior: 'smooth'
     });
 
-    // Add highlight effect
     strukObj.element.classList.add('highlight');
     setTimeout(() => {
       strukObj.element.classList.remove('highlight');
     }, 2000);
-    
-    // Show preview
+  
     previewImage.src = strukObj.src;
     previewModal.classList.add('active');
   }
 }
 
-// Search when typing
 searchInput.addEventListener('input', (e) => {
   searchReceipts(e.target.value);
 });
 
-// Search when button clicked
 searchButton.addEventListener('click', () => {
   searchReceipts(searchInput.value);
 });
 
-// Search when pressing Enter
 searchInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
     searchReceipts(searchInput.value);
