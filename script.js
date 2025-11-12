@@ -336,8 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* VIDEO PLAYLIST */
   const videoPlaylist = [
-    { src: "https://assets.microgram.id/alt-stage/videos/MAS2025.mp4", title: "ALTERNATIVE STAGE 2025" },
-    { src: "https://assets.microgram.id/alt-stage/videos/MAS2024.mp4", title: "ALTERNATIVE STAGE 2024" }
+    { src: "VID/MAS2025.mp4", title: "ALTERNATIVE STAGE 2025" },
+    { src: "VID/MAS2024.mp4", title: "ALTERNATIVE STAGE 2024" },
+    { src: "VID/MAS2024PT1.mp4", title: "ALTERNATIVE STAGE 2024 [MIDNIGHT TAKEOVER]" },
+    { src: "VID/MAS2024PT2.mp4", title: "ALTERNATIVE STAGE 2024" },
+    { src: "VID/MAS2023.mp4", title: "ALTERNATIVE STAGE 2023" }
   ];
 
   /* DROP MOMENT STRUK DATA */
@@ -352,86 +355,230 @@ document.addEventListener('DOMContentLoaded', () => {
     { icon: '🎪', title: 'VENUE TOUR', desc: 'Explore the concert location' }
   ];
 
-  /* MICRO MOMENT STRUK DATA - SIMPLIFIED VERSION */
+  /* MICRO MOMENT STRUK DATA - PNG VERSION */
   const microMomentData = [
     { 
+      image: 'struk/backstage.png', 
       title: 'BACKSTAGE PASS', 
       width: 280,
       height: 160
     },
     { 
+      image: 'struk/soundcheck.png', 
       title: 'SOUND CHECK', 
       width: 260,
       height: 150
     },
     { 
+      image: 'struk/photomoment.png', 
       title: 'PHOTO MOMENT', 
       width: 270,
       height: 155
     },
     { 
+      image: 'struk/vocalwarmup.png', 
       title: 'VOCAL WARMUP', 
       width: 290,
       height: 165
     },
     { 
+      image: 'struk/mixingboard.png', 
       title: 'MIXING BOARD', 
       width: 275,
       height: 158
     },
     { 
+      image: 'struk/stagesetup.png', 
       title: 'STAGE SETUP', 
       width: 285,
       height: 162
     },
     { 
+      image: 'struk/artistprep.png', 
       title: 'ARTIST PREP', 
       width: 265,
       height: 152
     },
     { 
+      image: 'struk/venuetour.png', 
       title: 'VENUE TOUR', 
       width: 295,
       height: 168
+    },
+    { 
+      image: 'struk/merchandise.png', 
+      title: 'MERCHANDISE', 
+      width: 275,
+      height: 160
+    },
+    { 
+      image: 'struk/struk 1.png', 
+      title: 'CROWD MOMENT', 
+      width: 285,
+      height: 158
+    },
+    { 
+      image: 'struk/struk 2.png', 
+      title: 'LIGHT SHOW', 
+      width: 270,
+      height: 155
+    },
+    { 
+      image: 'struk/struk 3.png', 
+      title: 'AFTER PARTY', 
+      width: 290,
+      height: 165
+    },
+    { 
+      image: 'struk/struk 4.png', 
+      title: 'BACKSTAGE TEAM', 
+      width: 280,
+      height: 162
+    },
+    { 
+      image: 'struk/struk 5.png', 
+      title: 'INSTRUMENTS', 
+      width: 265,
+      height: 152
+    },
+    { 
+      image: 'struk/struk 6.png', 
+      title: 'SPECIAL GUEST', 
+      width: 295,
+      height: 170
+    },
+    { 
+      image: 'struk/struk 7.png', 
+      title: 'ENCORE', 
+      width: 275,
+      height: 158
     }
   ];
 
-  /* BAND DATA PER TAHUN - SIMPLIFIED */
+  /* BAND DATA PER TAHUN */
   const bandData = {
     '2025': {
       bands: [
-        { name: 'BLEACH', youtube: 'https://www.youtube.com/results?search_query=BLEACH+band' },
-        { name: 'BLEU HOUSE', youtube: 'https://www.youtube.com/results?search_query=BLEUHOUSE+band' },
-        { name: 'CAL', youtube: 'https://www.youtube.com/results?search_query=CAL+band' },
-        { name: 'DONGKER', youtube: 'https://www.youtube.com/results?search_query=DONGKER+band' },
-        { name: 'ELKARMOYA', youtube: 'https://www.youtube.com/results?search_query=ELKARMOYA+band' }
+        { name: 'BLEACH', image: 'bands/BLEACH.jpg', youtube: 'https://www.youtube.com/results?search_query=BLEACH+band', gif: 'gifs/BLEACH.gif' },
+        { name: 'BLEU HOUSE', image: 'bands/BLEUHOUSE.jpg', youtube: 'https://www.youtube.com/results?search_query=BLEUHOUSE+band', gif: 'gifs/BLEUHOUSE.gif' },
+        { name: 'CAL', image: 'bands/CAL.png', youtube: 'https://www.youtube.com/results?search_query=CAL+band', gif: 'gifs/CAL.gif' },
+        { name: 'DONGKER', image: 'bands/DONGKER.jpg', youtube: 'https://www.youtube.com/results?search_query=DONGKER+band', gif: 'gifs/DONGKER.gif' },
+        { name: 'ELKARMOYA', image: 'bands/ELKARMOYA.jpg', youtube: 'https://www.youtube.com/results?search_query=ELKARMOYA+band', gif: 'gifs/ELKARMOYA.gif' },
+        { name: 'EAZZ', image: 'bands/EAZZ.jpg', youtube: 'https://www.youtube.com/results?search_query=EAZZ+band', gif: 'gifs/EAZZ.gif' },
+        { name: 'HEALS', image: 'bands/HEALS.webp', youtube: 'https://www.youtube.com/results?search_query=HEALS+band', gif: 'gifs/HEALS.gif' },
+        { name: 'HOCKEY HOOK', image: 'bands/HOCKEY HOOK.jpg', youtube: 'https://www.youtube.com/results?search_query=HOCKEY+HOOK+band', gif: 'gifs/HOCKEY_HOOK.gif' },
+        { name: 'LEIPZIG', image: 'bands/LEIPZIG.jpg', youtube: 'https://www.youtube.com/results?search_query=LEIPZIG+band', gif: 'gifs/LEIPZIG.gif' },
+        { name: 'LIZZIE', image: 'bands/LIZZIE.jpg', youtube: 'https://www.youtube.com/results?search_query=LIZZIE+band', gif: 'gifs/LIZZIE.gif' },
+        { name: 'MICROGRAM X BERTINDER', image: 'bands/MICROGRAM X BERTINDER.jpg', youtube: 'https://www.youtube.com/results?search_query=MICROGRAM+X+BERTINDER', gif: 'gifs/MICROGRAM_X_BERTINDER.gif' },
+        { name: 'MUCHOS LIBRE', image: 'bands/MUCHOS LIBRE.jpg', youtube: 'https://www.youtube.com/results?search_query=MUCHOS+LIBRE+band', gif: 'gifs/MUCHOS_LIBRE.gif' },
+        { name: 'MUNDAE', image: 'bands/MUNDAE.jpeg', youtube: 'https://www.youtube.com/results?search_query=MUNDAE+band', gif: 'gifs/MUNDAE.gif' },
+        { name: 'OSCAR LOLANG', image: 'bands/OSCAR LOLANG.jpg', youtube: 'https://www.youtube.com/results?search_query=OSCAR+LOLANG+band', gif: 'gifs/OSCAR_LOLANG.gif' },
+        { name: 'PREJUDIZE', image: 'bands/PREJUDIZE.jpeg', youtube: 'https://www.youtube.com/results?search_query=PREJUDIZE+band', gif: 'gifs/PREJUDIZE.gif' },
+        { name: 'RAY VIERA LAXMANA', image: 'bands/RAY VIERA LAXMANA.png', youtube: 'https://www.youtube.com/results?search_query=RAY+VIERA+LAXMANA+band', gif: 'gifs/RAY_VIERA_LAXMANA.gif' },
+        { name: 'SATURDAY NIGHT KARAOKE', image: 'bands/SATURDAY NIGHT KARAOKE.jpg', youtube: 'https://www.youtube.com/results?search_query=SATURDAY+NIGHT+KARAOKE+band', gif: 'gifs/SATURDAY_NIGHT_KARAOKE.gif' },
+        { name: 'SUNBATH', image: 'bands/SUNBATH.jpeg', youtube: 'https://www.youtube.com/results?search_query=SUNBATH+band', gif: 'gifs/SUNBATH.gif' },
+        { name: 'SWARM', image: 'bands/SWARM.jpg', youtube: 'https://www.youtube.com/results?search_query=SWARM+band', gif: 'gifs/SWARM.gif' },
+        { name: 'SYMPHONY POLYPHONIC', image: 'bands/SYMPHONY POLYPHONIC.jpg', youtube: 'https://www.youtube.com/results?search_query=SYMPHONY+POLYPHONIC+band', gif: 'gifs/SYMPHONY_POLYPHONIC.gif' },
+        { name: 'GENG', image: 'bands/GENG.jpg', youtube: 'https://www.youtube.com/results?search_query=GENG+band', gif: 'gifs/GENG.gif' },
+        { name: 'THE COUCH CLUB', image: 'bands/THE COUCH CLUB.jpeg', youtube: 'https://www.youtube.com/results?search_query=THE+COUCH+CLUB+band', gif: 'gifs/THE_COUCH_CLUB.gif' },
+        { name: 'THE SUGAR SPUN', image: 'bands/THE SUGAR SPUN.webp', youtube: 'https://www.youtube.com/results?search_query=THE+SUGAR+SPUN+band', gif: 'gifs/THE_SUGAR_SPUN.gif' },
+        { name: 'WHITE CHORUS', image: 'bands/White chorus.jpg', youtube: 'https://www.youtube.com/results?search_query=White+Chorus+band', gif: 'gifs/WHITE_CHORUS.gif' }
       ]
     },
     '2024': {
       bands: [
-        { name: 'BIN IDRIS', youtube: 'https://www.youtube.com/watch?v=rjgRFwz_uNs' },
-        { name: 'DZUL FAHMI', youtube: 'https://www.youtube.com/watch?v=5IpwcWk67fA' },
-        { name: 'EASTCAPE', youtube: 'https://www.youtube.com/watch?v=92XtSnzxAQ8' },
-        { name: 'HONEY', youtube: 'https://www.youtube.com/watch?v=qEMKOja2sTg' },
-        { name: 'IHCOD AGEDAS', youtube: 'https://www.youtube.com/watch?v=vLTU-xylMYk' }
+        { name: 'BIN IDRIS', image: 'BIN IDRIS.jpg', youtube: 'https://www.youtube.com/watch?v=rjgRFwz_uNs', gif: 'BIN_IDRIS.gif' },
+        { name: 'DZUL FAHMI', image: 'DZULFAHMI.jpg', youtube: 'https://www.youtube.com/watch?v=5IpwcWk67fA', gif: 'DZUL_FAHMI.gif' },
+        { name: 'EASTCAPE', image: 'EASTCAPE.png', youtube: 'https://www.youtube.com/watch?v=92XtSnzxAQ8', gif: 'EASTCAPE.gif' },
+        { name: 'HONEY', image: 'HONEY.png', youtube: 'https://www.youtube.com/watch?v=qEMKOja2sTg', gif: 'HONEY.gif' },
+        { name: 'IHCOD AGEDAS', image: 'bIHCOD AGEDAS.jpg', youtube: 'https://www.youtube.com/watch?v=vLTU-xylMYk', gif: 'IHCOD_AGEDAS.gif' },
+        { name: 'KAPSUL', image: 'KAPSUL.png', youtube: 'https://www.youtube.com/watch?v=bb-eljh7DME', gif: 'KAPSUL.gif' },
+        { name: 'MATIASU', image: 'MATIASU.jpeg', youtube: 'https://www.youtube.com/watch?v=NU49QRjoKfo', gif: 'MATIASU.gif' },
+        { name: 'TEXPACK', image: 'TEXPACK.jpg', youtube: 'https://www.youtube.com/watch?v=Cz19EEOngW8', gif: 'TEXPACK.gif' },
+        { name: 'THE COUCH CLUB', image: 'THE COUCH CLUB.jpeg', youtube: 'https://www.youtube.com/watch?v=yFW2-_hmZlI', gif: 'THE_COUCH_CLUB.gif' },
+        { name: 'PORIS FEAT. WIGIGO', image: 'PORIS.jpeg', youtube: 'https://www.youtube.com/watch?v=hbOTOP0FbsE', gif: 'PORIS.gif' },
+        { name: 'BUBBLEGUM CORE', image: 'BUBBLEGUM CORE.jpg', youtube: 'https://www.youtube.com/watch?v=Q9WPPQf3XEg', gif: 'BUBBLEGUM_CORE.gif' },
+        { name: 'DREANE', image: 'DREANE.jpg', youtube: 'https://www.youtube.com/watch?v=NkAN7FBLSBM', gif: 'DREANE.gif' },
+        { name: 'DRIZZLY', image: 'DRIZZLY.jpg', youtube: 'https://www.youtube.com/watch?v=PgvEzWBhfKo', gif: 'DRIZZLY.gif' },
+        { name: 'HE3X', image: 'HE3X.jpg', youtube: 'https://www.youtube.com/watch?v=PgvEzWBhfKo', gif: 'HE3X.gif' },
+        { name: 'MENTARI NOVEL', image: 'MENTARI NOVEL.jpeg', youtube: 'https://www.youtube.com/watch?v=6HynXxfZYJw', gif: 'MENTARI_NOVEL.gif' },
+        { name: 'PRECIOUS BLOOM', image: 'PRECIOUS BLOOM.jpg', youtube: 'https://www.youtube.com/watch?v=Gp4MDFJTASs', gif: 'PRECIOUS_BLOOM.gif' },
+        { name: 'STARDUCC', image: 'STARDUCC.jpg', youtube: 'https://www.youtube.com/watch?v=dRWENS3s5yY', gif: 'STARDUCC.gif' },
+        { name: 'THE CAROLINE\'S', image: 'THE CAROLINE.png', youtube: 'https://www.youtube.com/watch?v=L8td-O6icpE', gif: 'THE_CAROLINES.gif' },
+        { name: 'THE COTTONS', image: 'THE COTTONS.jpg', youtube: 'https://www.youtube.com/watch?v=ULGHQLyn41E', gif: 'THE_COTTONS.gif' },
+        { name: 'CITO GAKSO', image: 'CITO GAKSO.jpg', youtube: 'https://www.youtube.com/watch?v=xcBUrOw1FGQ', gif: 'CITO_GAKSO.gif' },
+        { name: 'DRIED CASSAVA', image: 'DRIED CASSAVA.jpg', youtube: 'https://www.youtube.com/watch?v=QG0ytYvU89I', gif: 'DRIED_CASSAVA.gif' },
+        { name: 'FUZZY!', image: 'FUZZY.jpg', youtube: 'https://www.youtube.com/results?search_query=Fuzzy+band', gif: 'FUZZY.gif' },
+        { name: 'GLYPH TALK', image: 'GLYPH TALK.jpeg', youtube: 'https://www.youtube.com/watch?v=IuQjfcdDFjE', gif: 'GLYPH_TALK.gif' },
+        { name: 'HIGH THERAPY', image: 'HIGH THERAPY.png', youtube: 'https://www.youtube.com/watch?v=FbGOqAJB5hQ', gif: 'HIGH_THERAPY.gif' },
+        { name: 'JIRAPAH', image: 'JIRAPAH.jpg', youtube: 'https://www.youtube.com/watch?v=umQy1UOFEVw', gif: 'JIRAPAH.gif' },
+        { name: 'ROOMIE BOYS ALERT', image: 'ROOMIE BOYS ALERT.jpg', youtube: 'https://www.youtube.com/watch?v=E-7K6Ppnddk', gif: 'ROOMIE_BOYS_ALERT.gif' },
+        { name: 'THE MILO', image: 'THE MILO.jpeg', youtube: 'https://www.youtube.com/watch?v=HX_yoAS_t7o', gif: 'THE_MILO.gif' },
+        { name: 'UNDER THE BIG BRIGHT YELLOW SUN', image: 'UNDER THE BIG BRIGHT YELLOW SUN.png', youtube: 'https://www.youtube.com/watch?v=KTbKUW53h6s', gif: 'UNDER_THE_BIG_BRIGHT.gif' },
       ]
     },
     '2023': {
       bands: [
-        { name: 'KANEKURO', youtube: 'https://www.youtube.com/results?search_query=Kanekuro' },
-        { name: 'RRAG', youtube: 'https://www.youtube.com/results?search_query=Rrag' },
-        { name: 'ZEAL', youtube: 'https://www.youtube.com/results?search_query=Zeal+band' },
-        { name: 'LAIR', youtube: 'https://www.youtube.com/results?search_query=Lair+band' },
-        { name: 'SKY SUCAHYO', youtube: 'https://www.youtube.com/results?search_query=Sky+Sucahyo' }
+        { name: 'KANEKURO', image: 'bands/KANEKURO.webp', youtube: 'https://www.youtube.com/results?search_query=Kanekuro', gif: 'gifs/KANEKURO.gif' },
+        { name: 'RRAG', image: 'bands/RRAG.png', youtube: 'https://www.youtube.com/results?search_query=Rrag', gif: 'gifs/RRAG.gif' },
+        { name: 'ZEAL', image: 'bands/ZEAL.webp', youtube: 'https://www.youtube.com/results?search_query=Zeal+band', gif: 'gifs/ZEAL.gif' },
+        { name: 'LAIR', image: 'bands/LAIR.jpg', youtube: 'https://www.youtube.com/results?search_query=Lair+band', gif: 'gifs/LAIR.gif' },
+        { name: 'SKY SUCAHYO', image: 'bands/SKY SUCAHYO.jpeg', youtube: 'https://www.youtube.com/results?search_query=Sky+Sucahyo', gif: 'gifs/SKY_SUCAHYO.gif' },
+        { name: 'MOONGAZING AND HER', image: 'bands/MOONGAZING AND HER.jpg', youtube: 'https://www.youtube.com/results?search_query=Moongazing+and+Her', gif: 'gifs/MOONGAZING_AND_HER.gif' },
+        { name: 'SWELLOW', image: 'bands/SWELLOW.png', youtube: 'https://www.youtube.com/results?search_query=Swellow', gif: 'gifs/SWELLOW.gif' },
+        { name: 'PEONIES', image: 'bands/PEONIES.jpeg', youtube: 'https://www.youtube.com/results?search_query=Peonies+band', gif: 'gifs/PEONIES.gif' },
+        { name: 'BEDCHAMBER', image: 'bands/BEDCHAMBER.png', youtube: 'https://www.youtube.com/results?search_query=Bedchamber', gif: 'gifs/BEDCHAMBER.gif' },
+        { name: 'MILLEDENIALS', image: 'bands/MILLEDENIALS.jpeg', youtube: 'https://www.youtube.com/results?search_query=Milledenials', gif: 'gifs/MILLEDENIALS.gif' },
+        { name: 'VT-00', image: 'bands/VT-00.jpeg', youtube: 'https://www.youtube.com/results?search_query=vt-00', gif: 'gifs/VT-00.gif' },
+        { name: 'FTLFRAME', image: 'bands/FTLFRAME.jpg', youtube: 'https://www.youtube.com/results?search_query=Ftlframe', gif: 'gifs/FTLFRAME.gif' },
+        { name: 'GODPLANT', image: 'bands/GODPLANT.jpeg', youtube: 'https://www.youtube.com/results?search_query=Godplant', gif: 'gifs/GODPLANT.gif' },
+        { name: 'BRUNOBAUER', image: 'bands/BRUNOBAUER.jpg', youtube: 'https://www.youtube.com/results?search_query=Brunobauer', gif: 'gifs/BRUNOBAUER.gif' },
+        { name: 'HUMINOID', image: 'bands/HUMINOID.jpeg', youtube: 'https://www.youtube.com/results?search_query=Huminoid', gif: 'gifs/HUMINOID.gif' },
+        { name: 'REKAH', image: 'bands/REKAH.jpg', youtube: 'https://www.youtube.com/results?search_query=Rekah', gif: 'gifs/REKAH.gif' },
+        { name: 'PEACH', image: 'bands/PEACH.jpg', youtube: 'https://www.youtube.com/results?search_query=Peach+band', gif: 'gifs/PEACH.gif' },
+        { name: 'AMERTA', image: 'bands/AMERTA.png', youtube: 'https://www.youtube.com/results?search_query=Amerta', gif: 'gifs/AMERTA.gif' },
+        { name: 'CREVE, OUVERTE!', image: 'bands/CREVE.jpg', youtube: 'https://www.youtube.com/results?search_query=Creve+Ouverte', gif: 'gifs/CREVE_OUVERTE.gif' },
+        { name: 'TARRKAM', image: 'bands/TARRKAM.jpg', youtube: 'https://www.youtube.com/results?search_query=Tarrkam', gif: 'gifs/TARRKAM.gif' },
+        { name: 'DEKADENZ', image: 'bands/DEKADENZ.jpeg', youtube: 'https://www.youtube.com/results?search_query=Dekadenz', gif: 'gifs/DEKADENZ.gif' },
+        { name: 'PAGUYUBAN CROWD SURF', image: 'bands/PAGUYUBAN CROWD SURF.jpg', youtube: 'https://www.youtube.com/results?search_query=Paguyuban+Crowd+Surf', gif: 'gifs/PAGUYUBAN_CROWD_SURF.gif' },
+        { name: 'NATINSON', image: 'bands/NATINSON.jpg', youtube: 'https://www.youtube.com/results?search_query=Natinson', gif: 'gifs/NATINSON.gif' },
+        { name: 'LAMEBRAIN', image: 'bands/LAMEBRAIN.webp', youtube: 'https://www.youtube.com/results?search_query=Lamebrain', gif: 'gifs/LAMEBRAIN.gif' },
+        { name: 'GAUNG', image: 'bands/GAUNG.webp', youtube: 'https://www.youtube.com/results?search_query=Gaung+band', gif: 'gifs/GAUNG.gif' },
+        { name: 'ELKARMOYA', image: 'bands/ELKARMOYA.jpg', youtube: 'https://www.youtube.com/results?search_query=ELKARMOYA+Mariachi', gif: 'gifs/ELKARMOYA.gif' },
+        { name: 'IMPROMPTU', image: 'bands/IMPROMPTU.jpg', youtube: 'https://www.youtube.com/results?search_query=Impromptu+band', gif: 'gifs/IMPROMPTU.gif' },
+        { name: 'GIRL AND HER BADMOOD', image: 'bands/GIRL AND HER BADMOOD.jpeg', youtube: 'https://www.youtube.com/results?search_query=Girl+and+Her+Badmood', gif: 'gifs/GIRL_AND_HER_BADMOOD.gif' },
+        { name: 'FLOWR PIT', image: 'bands/FLOWR PIT.jpg', youtube: 'https://www.youtube.com/results?search_query=Flowr+Pit', gif: 'gifs/FLOWR_PIT.gif' },
+        { name: 'BEESWAX', image: 'bands/BEESWAX.jpg', youtube: 'https://www.youtube.com/results?search_query=Beeswax+band', gif: 'gifs/BEESWAX.gif' },
+        { name: 'NARTOK', image: 'bands/NARTOK.jpeg', youtube: 'https://www.youtube.com/results?search_query=Nartok', gif: 'gifs/NARTOK.gif' },
+        { name: 'MAMANG KESBOR', image: 'bands/MAMANG KESBOR.jpeg', youtube: 'https://www.youtube.com/results?search_query=Mamang+Kesbor', gif: 'gifs/MAMANG_KESBOR.gif' },
+        { name: 'SALON RNB', image: 'bands/SALON RNB.png', youtube: 'https://www.youtube.com/results?search_query=Salon+RnB', gif: 'gifs/SALON_RNB.gif' }
       ]
     },
     '2022': {
       bands: [
-        { name: 'BLEACH', youtube: 'https://www.youtube.com/results?search_query=BLEACH+band' },
-        { name: 'BLEU HOUSE', youtube: 'https://www.youtube.com/results?search_query=BLEUHOUSE+band' },
-        { name: 'CAL', youtube: 'https://www.youtube.com/results?search_query=CAL+band' },
-        { name: 'DONGKER X KINDER BLOOMEN', youtube: 'https://www.youtube.com/results?search_query=DONGKER+KINDER+BLOOMEN' },
-        { name: 'ELKARMOYA (LATIN GOES POP)', youtube: 'https://www.youtube.com/results?search_query=ELKARMOYA+LATIN+GOES+POP' }
+        { name: 'BLEACH', image: 'BLEACH.jpg', youtube: 'https://www.youtube.com/results?search_query=BLEACH+band', gif: 'gifs/BLEACH.gif' },
+        { name: 'BLEU HOUSE', image: 'BLEUHOUSE.jpg', youtube: 'https://www.youtube.com/results?search_query=BLEUHOUSE+band', gif: 'gifs/BLEUHOUSE.gif' },
+        { name: 'CAL', image: 'CAL.png', youtube: 'https://www.youtube.com/results?search_query=CAL+band', gif: 'gifs/CAL.gif' },
+        { name: 'DONGKER X KINDER BLOOMEN', image: 'DONGKER.jpg', youtube: 'https://www.youtube.com/results?search_query=DONGKER+KINDER+BLOOMEN', gif: 'gifs/DONGKER.gif' },
+        { name: 'ELKARMOYA (LATIN GOES POP)', image: 'ELKARMOYA.jpg', youtube: 'https://www.youtube.com/results?search_query=ELKARMOYA+LATIN+GOES+POP', gif: 'gifs/ELKARMOYA.gif' },
+        { name: 'EAZZ', image: 'EAZZ.jpg', youtube: 'https://www.youtube.com/results?search_query=EAZZ+band', gif: 'gifs/EAZZ.gif' },
+        { name: 'HEALS', image: 'HEALS.webp', youtube: 'https://www.youtube.com/results?search_query=HEALS+band', gif: 'gifs/HEALS.gif' },
+        { name: 'HOCKEY HOOK', image: 'HOCKEY HOOK.jpg', youtube: 'https://www.youtube.com/results?search_query=HOCKEY+HOOK+band', gif: 'gifs/HOCKEY_HOOK.gif' },
+        { name: 'LEIPZIG', image: 'LEIPZIG.jpg', youtube: 'https://www.youtube.com/results?search_query=LEIPZIG+band', gif: 'gifs/LEIPZIG.gif' },
+        { name: 'LIZZIE', image: 'LIZZIE.jpg', youtube: 'https://www.youtube.com/results?search_query=LIZZIE+band', gif: 'gifs/LIZZIE.gif' },
+        { name: 'MICROGRAM X BERTINDER (KARAOKE LAGU CINTA)', image: 'MICROGRAM X BERTINDER.jpg', youtube: 'https://www.youtube.com/results?search_query=MICROGRAM+X+BERTINDER+KARAOKE', gif: 'gifs/MICROGRAM_X_BERTINDER.gif' },
+        { name: 'MUCHOS LIBRE', image: 'UCHOS LIBRE.jpg', youtube: 'https://www.youtube.com/results?search_query=MUCHOS+LIBRE+band', gif: 'gifs/MUCHOS_LIBRE.gif' },
+        { name: 'MUNDAE', image: 'MUNDAE.jpeg', youtube: 'https://www.youtube.com/results?search_query=MUNDAE+band', gif: 'gifs/MUNDAE.gif' },
+        { name: 'OSCAR LOLANG (JALANI SENDIRI EP SHOWCASE)', image: 'OSCAR LOLANG.jpg', youtube: 'https://www.youtube.com/results?search_query=OSCAR+LOLANG+JALANI+SENDIRI', gif: 'gifs/OSCAR_LOLANG.gif' },
+        { name: 'PREJUDIZE', image: 'PREJUDIZE.jpeg', youtube: 'https://www.youtube.com/results?search_query=PREJUDIZE+band', gif: 'gifs/PREJUDIZE.gif' },
+        { name: 'RAY VIERA LAKSAMANA', image: 'RAY VIERA LAXMANA.png', youtube: 'https://www.youtube.com/results?search_query=RAY+VIERA+LAKSAMANA', gif: 'gifs/RAY_VIERA_LAXMANA.gif' },
+        { name: 'SATURDAY NIGHT KARAOKE (WITH SPECIAL REVENGE MUSIC TALENT SET)', image: 'SATURDAY NIGHT KARAOKE.jpg', youtube: 'https://www.youtube.com/results?search_query=SATURDAY+NIGHT+KARAOKE+REVENGE', gif: 'gifs/SATURDAY_NIGHT_KARAOKE.gif' },
+        { name: 'SUNRATH', image: 'SUNBATH.jpeg', youtube: 'https://www.youtube.com/results?search_query=SUNRATH+band', gif: 'gifs/SUNBATH.gif' },
+        { name: 'SWARM', image: 'SWARM.jpg', youtube: 'https://www.youtube.com/results?search_query=SWARM+band', gif: 'gifs/SWARM.gif' },
+        { name: 'SYMPHONY POLYPHONIC GENG', image: 'SYMPHONY POLYPHONIC.jpg', youtube: 'https://www.youtube.com/results?search_query=SYMPHONY+POLYPHONIC+GENG', gif: 'gifs/SYMPHONY_POLYPHONIC.gif' },
+        { name: 'THE COUCH CLUB', image: 'THE COUCH CLUB.jpeg', youtube: 'https://www.youtube.com/results?search_query=THE+COUCH+CLUB+band', gif: 'gifs/THE_COUCH_CLUB.gif' },
+        { name: 'THE SUGAR SPUN', image: 'THE SUGAR SPUN.webp', youtube: 'https://www.youtube.com/results?search_query=THE+SUGAR+SPUN+band', gif: 'gifs/THE_SUGAR_SPUN.gif' },
+        { name: 'WHITE CHORUS', image: 'White chorus.jpg', youtube: 'https://www.youtube.com/results?search_query=White+Chorus+band', gif: 'gifs/WHITE_CHORUS.gif' }
       ]
     }
   };
@@ -520,11 +667,9 @@ document.addEventListener('DOMContentLoaded', () => {
       strukItem.style.left = `${posX}px`;
       strukItem.style.top = `${posY}px`;
       
-      // Create placeholder content instead of images
       strukItem.innerHTML = `
-        <div class="struk-placeholder" style="width:100%;height:100%;background:rgba(255,0,124,0.1);border:1px dashed #ff007c;display:flex;align-items:center;justify-content:center;color:#ff007c;font-size:12px;padding:10px;text-align:center;">
-          ${item.title}
-        </div>
+        <img src="${item.image}" alt="${item.title}" class="struk-image-transparent"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;background:rgba(255,0,124,0.1);border:1px dashed #ff007c;display:flex;align-items:center;justify-content:center;color:#ff007c;font-size:12px;\\'>${item.title}</div>'">
       `;
       
       strukItem.addEventListener('click', (e) => {
@@ -733,7 +878,9 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
           <li class="band-item" 
               data-band="${band.name}" 
-              data-youtube="${band.youtube}">
+              data-image="${band.image}" 
+              data-youtube="${band.youtube}"
+              data-gif="${band.gif}">
             ${band.name}
           </li>
         `;
@@ -745,7 +892,9 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
           <li class="band-item" 
               data-band="${band.name}" 
-              data-youtube="${band.youtube}">
+              data-image="${band.image}" 
+              data-youtube="${band.youtube}"
+              data-gif="${band.gif}">
             ${band.name}
           </li>
         `;
@@ -766,7 +915,9 @@ document.addEventListener('DOMContentLoaded', () => {
           html += `
             <li class="band-item" 
                 data-band="${band.name}" 
-                data-youtube="${band.youtube}">
+                data-image="${band.image}" 
+                data-youtube="${band.youtube}"
+                data-gif="${band.gif}">
               ${band.name}
             </li>
           `;
@@ -784,6 +935,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function initBandHoverEffect() {
     const bandItems = document.querySelectorAll('.band-item');
     const isMobile = window.innerWidth < 768;
+    
+    // Preload images untuk performa
+    const preloadImages = {};
+    Object.keys(bandData).forEach(year => {
+      bandData[year].bands.forEach(band => {
+        if (band.image && !preloadImages[band.image]) {
+          preloadImages[band.image] = new Image();
+          preloadImages[band.image].src = band.image;
+        }
+        if (band.gif && !preloadImages[band.gif]) {
+          preloadImages[band.gif] = new Image();
+          preloadImages[band.gif].src = band.gif;
+        }
+      });
+    });
     
     let currentHoverTimeout = null;
     
@@ -834,19 +1000,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function showBandMedia(item) {
       const bandName = item.getAttribute('data-band');
+      const imagePath = item.getAttribute('data-image');
+      const gifPath = item.getAttribute('data-gif');
       
       // Tampilkan band image container
       bandImageContainer.classList.add('show');
       
       let bandImage = bandImageContainer.querySelector('.band-image');
       if (!bandImage) {
-        bandImage = document.createElement('div');
+        bandImage = document.createElement('img');
         bandImage.className = 'band-image';
         bandImageContainer.appendChild(bandImage);
       }
       
-      // Create placeholder content
-      bandImage.innerHTML = `<div class="band-name-display">${bandName}</div>`;
+      bandImage.src = imagePath;
+      bandImage.alt = bandName.toUpperCase();
       
       const placeholder = bandImageContainer.querySelector('.band-image-placeholder');
       if (placeholder) {
@@ -860,13 +1028,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       let bandGif = bandGifBackground.querySelector('.band-gif');
       if (!bandGif) {
-        bandGif = document.createElement('div');
+        bandGif = document.createElement('img');
         bandGif.className = 'band-gif';
         bandGifBackground.appendChild(bandGif);
       }
       
-      // Create animated background
-      bandGif.innerHTML = `<div class="band-animation">${bandName}</div>`;
+      bandGif.src = gifPath;
+      bandGif.alt = `${bandName} GIF`;
       
       const gifPlaceholder = bandGifBackground.querySelector('.band-gif-placeholder');
       if (gifPlaceholder) {
