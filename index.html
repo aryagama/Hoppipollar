@@ -1,137 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta property="og:title" content="Alternative Stage" />
-  <meta property="og:description" content="Tiny sounds with bold presence. Alternative Stage @ Pestapora 2025." />
-  <meta property="og:image" content="https://Alternativestage.site/assets/images/02.%20Microgram_logomark-broken%20white.png" />
-  <meta property="og:url" content="https://Alternativestage.site" />
-  <meta property="og:type" content="website" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Microgram Alternative Stage</title>
-  <link rel="stylesheet" href="https://use.typekit.net/your-kit-id.css" />
-  <!-- Favicon utama -->
-  <link rel="icon" type="image/png" href="02. Microgram_logomark-broken white.png">
-
-  <!-- Opsional untuk iOS/Apple -->
-  <link rel="apple-touch-icon" href="02. Microgram_logomark-broken white.png">
-
-  <!-- Opsional untuk berbagai ukuran -->
-  <link rel="icon" type="image/png" sizes="32x32" href="02. Microgram_logomark-broken white.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="02. Microgram_logomark-broken white.png">
-  
-  <!-- Font Awesome untuk ikon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="/ICON.png" type="image/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- ASCII Background Animation -->
-  <div class="ascii-background">
-    <pre class="ascii-content" id="asciiContent"></pre>
-  </div>
-
-  <!-- Header Layout -->
-  <header class="header">
-    <div class="header-left">
-      <p class="header-tagline interactive-button" id="dropMomentBtn">
-        <span class="drop-moment-text drop-moment-line1">LET'S DROP A</span>
-        <span class="drop-moment-text drop-moment-line2">MICRO MOMENT.</span>
-      </p>
+  <!-- VIDEO BACKGROUND -->
+  <div class="video-background">
+    <video id="bgVideo" autoplay muted loop playsinline>
+      <source src="https://assets.microgram.id/alt-stage/videos/MAS2025.mp4" type="video/mp4">
+      <source src="https://assets.microgram.id/alt-stage/videos/MAS2024.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+    
+    <!-- Video Title Display -->
+    <div class="video-title-container">
+      <div class="video-title" id="videoTitle">MICROVERSE STAGE 2022</div>
     </div>
     
+    <!-- Next Video Cursor -->
+    <div class="next-video-cursor" id="nextVideoCursor">
+      <span class="next-text">[NEXT]</span>
+    </div>
+  </div>
+
+  <!-- VIDEO CONTROLS (hidden by default) -->
+  <div class="video-controls">
+    <button id="videoToggle" class="video-toggle" title="Toggle video background">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M2 2h4v12H2zM10 2h4v12h-4z"/>
+      </svg>
+    </button>
+    <select id="videoSelect" class="video-select">
+      <option value="https://assets.microgram.id/alt-stage/videos/MAS2025.mp4">Alternative Stage 2025</option>
+      <option value="https://assets.microgram.id/alt-stage/videos/MAS2024.mp4">Alternative Stage 2024</option>
+    </select>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button id="dropMomentBtn" class="header-tagline" aria-expanded="false" aria-controls="timelinePopup">
+        <span class="line1">LET'S DROP A</span>
+        <span class="line2">MICRO MOMENT.</span>
+      </button>
+    </div>
+
+    <div class="header-center">
+      
+      <!-- MUSIC PLAYER CENTER - ONE LINE -->
+      <div class="now-playing-center" id="nowPlayingCenter">
+        <button id="musicBtnCenter" class="music-control-btn" aria-pressed="false" title="Play / Pause music">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path class="play-icon" d="M4 2v12l10-6z"/>
+            <path class="pause-icon" d="M4 2h3v12H4zM9 2h3v12H9z" style="display:none"/>
+          </svg>
+        </button>
+        <button id="nextMusicBtn" class="music-control-btn" title="Next track">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 2v12l8-6zM12 2h2v12h-2z"/>
+          </svg>
+        </button>
+        <div class="track-title-container">
+          <span class="track-title" id="trackTitle">JINGLE RNB ALTERNATIVE STAGE 2025</span>
+        </div>
+      </div>
+    </div>
+
     <div class="header-right">
-      <span class="header-nav interactive-button" id="moodBtn">MOOD</span>
+      <div class="datetime" id="datetime" aria-live="polite">
+        <div id="dateText">OCT 22 2025</div>
+        <div id="timeText">12.00.00 | ID</div>
+      </div>
     </div>
   </header>
 
-  <!-- Info Button (Bottom Left) -->
-  <div class="info-icon-container interactive-button" id="infoBtn">
-    <div class="info-icon-circle">
-      <span class="info-icon">i</span>
-    </div>
-  </div>
-
-  <!-- Mood Options -->
-  <div class="mood-options" id="moodOptions">
-    <div class="mood-option" data-mood="default"></div>
-    <div class="mood-option" data-mood="black"></div>
-    <div class="mood-option" data-mood="yellow"></div>
-    <div class="mood-option" data-mood="purple"></div>
-  </div>
-
-  <!-- Info Modal -->
-  <div class="modal" id="infoModal">
-    <div class="modal-content">
-      <button class="close-button interactive-button" id="closeModal" aria-label="Close modal">&times;</button>
-      <h2>ALTERNATIVE STAGE</h2>
-      <p>Microgram @ Pestapora 2025</p>
-      <p>Tiny sounds with bold presence.</p>
-      <p>Sept 5-7 · Gambir Expo, Jakarta</p>
-      <p>Find us at the Alternative Stage.</p>
-      
-      <!-- Social Media Icons -->
-      <div class="social-media-icons">
-        <a href="https://instagram.com/microgram.ent" target="_blank" class="social-icon">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://discord.gg/nRJGEAfC" target="_blank" class="social-icon">
-          <i class="fab fa-discord"></i>
-        </a>
+  <!-- TIMELINE POPUP -->
+  <div id="timelinePopup" class="timeline-popup" aria-hidden="true">
+    <div class="timeline-wrapper">
+      <div class="timeline-line" aria-hidden="true"></div>
+      <div class="timeline-items" role="menu" aria-label="Alternative Stage years">
+        <button class="timeline-btn" role="menuitem">ALTERNATIVE STAGE 2025</button>
+        <button class="timeline-btn" role="menuitem">ALTERNATIVE STAGE 2024</button>
+        <button class="timeline-btn" role="menuitem">ALTERNATIVE STAGE 2023</button>
+        <button class="timeline-btn" role="menuitem">MICROVERSE STAGE 2022</button>
       </div>
     </div>
   </div>
 
-  <!-- Search Modal -->
-  <div class="search-modal" id="searchModal">
-    <div class="search-content">
-      <button class="close-search interactive-button" id="closeSearch" aria-label="Close search">&times;</button>
-      <h2>FIND YOUR RECEIPT</h2>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search by receipt name...">
-        <button id="searchButton">SEARCH</button>
+  <!-- DROP MOMENT STRUK -->
+  <div id="dropMomentStruk" class="drop-moment-struk" aria-hidden="true">
+    <div class="struk-container">
+      <div class="struk-header">
+        <h3>MICRO MOMENT DROP</h3>
+        <p>Instant memories from the stage</p>
       </div>
-      <div class="search-results" id="searchResults"></div>
+      <div class="struk-grid">
+        <!-- Struk items akan diisi oleh JavaScript -->
+      </div>
+      <button id="closeStruk" class="close-struk">
+        <span>CLOSE</span>
+      </button>
     </div>
   </div>
 
-  <!-- Receipt Preview Modal -->
-  <div class="preview-modal" id="previewModal">
-    <div class="preview-content">
-      <button class="close-preview interactive-button" id="closePreview" aria-label="Close preview">&times;</button>
-      <img id="previewImage" class="preview-image" src="" alt="Preview Receipt">
-      <button class="share-button interactive-button" id="shareButton" aria-label="Share image">SHARE</button>
+  <!-- MICRO MOMENT STRUK (IMPROVED VERSION) -->
+  <div id="microMomentStruk" class="micro-moment-struk" aria-hidden="true">
+    <div class="struk-overlay"></div>
+    <div class="struk-infinite-container">
+      <div class="struk-scroll-area">
+        <!-- Struk akan di-generate oleh JavaScript -->
+      </div>
     </div>
   </div>
 
-  <!-- Video Background -->
-  <div class="gif-background">
-      <img src="Bumper ALT STAGE TRANSPARAN_3.gif" alt="Bumper Logo" class="overlay-gif">
+  <!-- INFO button bottom-right -->
+  <button id="infoBtn" class="info-btn" aria-expanded="false">INFO</button>
+
+  <!-- INFO PANEL (toggle) -->
+  <aside id="infoPanel" class="info-panel" role="dialog" aria-hidden="true" aria-label="Informasi">
+    <button id="closeInfo" class="close-info" aria-label="Close info">&times;</button>
+    <h3>ALTERNATIVE STAGE</h3>
+    <p>Tiny sounds with bold presence.</p>
+    
+    <!-- Social Media Buttons -->
+    <div class="social-buttons">
+      <a href="https://www.instagram.com/microgram.ent?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="social-btn" title="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+      <a href="https://www.youtube.com/@micrograment" target="_blank" class="social-btn" title="YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+        </svg>
+      </a>
+      <a href="https://x.com/MicrogramEnt" target="_blank" class="social-btn" title="Twitter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+      <a href="https://microgram.id/" target="_blank" class="social-btn" title="Website">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- INFO OVERLAY (fullscreen) -->
+  <div id="infoOverlay" class="info-overlay" aria-hidden="true">
+    <!-- Band Image Display -->
+    <div class="band-image-container" id="bandImageContainer">
+      <div class="band-image-placeholder">
+        <span>HOVER BAND NAME TO SEE IMAGE</span>
+      </div>
+    </div>
+
+    <!-- Band GIF Background -->
+    <div class="band-gif-background" id="bandGifBackground">
+      <div class="band-gif-placeholder">
+        <span>GIF BACKGROUND</span>
+      </div>
+    </div>
+
+    <!-- Year Navigation - Samping Kiri -->
+    <div class="year-navigation-left">
+      <div class="year-container">
+        <button class="year-btn" data-year="2025">2025</button>
+        <button class="year-btn" data-year="2024">2024</button>
+        <button class="year-btn active" data-year="2023">2023</button>
+        <button class="year-btn" data-year="2022">2022</button>
+      </div>
+    </div>
+
+    <div class="info-container">
+      <!-- Zigzag Layout Container -->
+      <div class="zigzag-container">
+        <!-- Row 1: Title dengan efek ketik -->
+        <div class="zigzag-row zigzag-title">
+          <div class="zigzag-item">
+            <h1 class="zigzag-main-title typing-element" id="mainTitle">
+              <span class="typing-text"></span>
+              <span class="typing-cursor">|</span>
+            </h1>
+          </div>
+        </div>
+
+        <!-- Row 2: Description -->
+        <div class="zigzag-row zigzag-description">
+          <div class="zigzag-item">
+            <p class="zigzag-text">
+              "A space dedicated to emerging musicians that express their art through raw sounds and authenticity. The Alternative Stage brings together communities of bold and passionate artists redefining music through creative independence."
+            </p>
+          </div>
+        </div>
+
+        <!-- Row 3: Emerging Band Performance Title -->
+        <div class="zigzag-row zigzag-band-title">
+          <div class="zigzag-item">
+            <h2 class="zigzag-subtitle">EMERGING BAND PERFORMANCE</h2>
+          </div>
+        </div>
+
+        <!-- Row 4: Band List dengan hover effect -->
+        <div class="zigzag-row zigzag-band-list">
+          <div class="zigzag-item">
+            <div class="band-list" id="bandList">
+              <!-- Band list akan diisi oleh JavaScript berdasarkan tahun -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer dengan Socials dan Close Button -->
+      <div class="info-footer">
+        <div class="socials">
+          <a href="https://www.instagram.com/microgram.ent" target="_blank" class="social-btn" title="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+          <a href="https://www.youtube.com/@micrograment" target="_blank" class="social-btn" title="YouTube">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            </svg>
+          </a>
+          <a href="https://x.com/MicrogramEnt" target="_blank" class="social-btn" title="Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="https://microgram.id/" target="_blank" class="social-btn" title="Website">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </a>
+        </div>
+        
+        <!-- Close Button (KANAN) -->
+        <button id="infoOverlayClose" class="info-overlay-close">
+          <span>CLOSE</span>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="scroll-container" id="scrollContainer">
-    <div class="struk-container" id="strukContainer"></div>
-  </div>
-  
-  <!-- Custom Cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-follower" id="cursorFollower"></div>
-  <div class="cursor-text" id="cursorText"></div>
-
-  <!-- Zoom Controls -->
-  <div class="zoom-controls">
-    <button class="zoom-button interactive-button" id="zoomIn" aria-label="Zoom in">+</button>
-    <button class="zoom-button interactive-button" id="zoomOut" aria-label="Zoom out">-</button>
-  </div>
-
-  <!-- Background Music -->
-  <audio id="bgMusic" loop>
-    <source src="AUD/Jingle Hyperpop.wav" type="audio/mpeg">
-    Your browser does not support the audio element.
+  <!-- Background audio tracks -->
+  <audio id="bgMusic" preload="auto">
+    <source src="https://assets.microgram.id/alt-stage/audio/jingle-8bit.mp3" type="audio/mp3">
+    Your browser does not support audio.
   </audio>
+
+  <!-- Custom Cursor -->
+  <div id="customCursor" class="custom-cursor">
+    <div class="cursor-text"></div>
+  </div>
 
   <script src="script.js"></script>
 </body>
-</html>
 </html>
