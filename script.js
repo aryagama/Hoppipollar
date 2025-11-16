@@ -5,13 +5,14 @@ class CustomCursor {
     this.cursorText = this.cursor.querySelector('.cursor-text');
     this.isVisible = false;
     this.currentText = '';
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
     
     this.init();
   }
   
   init() {
     // Hide cursor on touch devices
-    if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    if (this.isTouchDevice) {
       this.cursor.style.display = 'none';
       return;
     }
@@ -129,6 +130,14 @@ class CustomCursor {
     document.dispatchEvent(mouseEvent);
   }
   
+  showClickText() {
+    if (this.currentText !== 'CLICK') {
+      this.cursorText.textContent = '[CLICK]';
+      this.cursorText.classList.add('show');
+      this.currentText = 'CLICK';
+    }
+  }
+  
   hideText() {
     this.cursorText.classList.remove('show');
     this.cursorText.textContent = '';
@@ -146,6 +155,8 @@ class StrukScrollManager {
     this.startY = 0;
     this.scrollLeft = 0;
     this.scrollTop = 0;
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
+    this.touchStartTime = 0;
     
     this.init();
   }
@@ -156,27 +167,34 @@ class StrukScrollManager {
       return;
     }
     
-    console.log('Initializing improved scroll functionality...');
+    console.log('Initializing improved scroll functionality for', this.isTouchDevice ? 'touch device' : 'desktop');
     
     // Enable scroll untuk semua device
     this.container.style.overflow = 'auto';
-    this.container.style.cursor = 'grab';
+    this.container.style.cursor = this.isTouchDevice ? 'default' : 'grab';
     
-    // Mouse wheel/trackpad events
-    this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+    // Mouse wheel/trackpad events untuk desktop
+    if (!this.isTouchDevice) {
+      this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+      
+      // Mouse drag events
+      this.container.addEventListener('mousedown', this.handleMouseDown.bind(this));
+      document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+      document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+      
+      // Double click untuk reset view
+      this.container.addEventListener('dblclick', this.centerView.bind(this));
+    }
     
-    // Mouse drag events
-    this.container.addEventListener('mousedown', this.handleMouseDown.bind(this));
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
-    
-    // Touch events untuk mobile
+    // Touch events untuk mobile - PERBAIKAN: Gunakan passive: true untuk performa
     this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
     this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-    this.container.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     
-    // Double click untuk reset view
-    this.container.addEventListener('dblclick', this.centerView.bind(this));
+    // Show mobile scroll hint
+    if (this.isTouchDevice) {
+      this.showMobileHint();
+    }
     
     console.log('Scroll functionality initialized successfully');
   }
@@ -236,7 +254,11 @@ class StrukScrollManager {
     this.startY = touch.clientY;
     this.scrollLeft = this.container.scrollLeft;
     this.scrollTop = this.container.scrollTop;
+    this.touchStartTime = Date.now();
     this.isDragging = true;
+    
+    // Hide mobile hint setelah user mulai scroll
+    this.hideMobileHint();
   }
   
   handleTouchMove(e) {
@@ -260,8 +282,15 @@ class StrukScrollManager {
     this.scrollTop = this.container.scrollTop;
   }
   
-  handleTouchEnd() {
+  handleTouchEnd(e) {
     this.isDragging = false;
+    
+    // Cek jika ini tap (bukan scroll)
+    const touchDuration = Date.now() - this.touchStartTime;
+    if (touchDuration < 200) {
+      // Ini adalah tap, biarkan event click biasa menanganinya
+      return;
+    }
   }
   
   centerView() {
@@ -277,6 +306,27 @@ class StrukScrollManager {
     }
   }
   
+  showMobileHint() {
+    const hint = document.getElementById('mobileScrollHint');
+    if (hint) {
+      setTimeout(() => {
+        hint.classList.add('show');
+      }, 1000);
+      
+      // Auto hide setelah 5 detik
+      setTimeout(() => {
+        this.hideMobileHint();
+      }, 5000);
+    }
+  }
+  
+  hideMobileHint() {
+    const hint = document.getElementById('mobileScrollHint');
+    if (hint) {
+      hint.classList.remove('show');
+    }
+  }
+  
   // Method untuk debug
   debug() {
     console.log('Scroll Container Debug:', {
@@ -285,8 +335,177 @@ class StrukScrollManager {
       scrollHeight: this.container.scrollHeight,
       clientWidth: this.container.clientWidth,
       clientHeight: this.container.clientHeight,
-      scrollable: this.container.scrollWidth > this.container.clientWidth || this.container.scrollHeight > this.container.clientHeight
+      scrollable: this.container.scrollWidth > this.container.clientWidth || this.container.scrollHeight > this.container.clientHeight,
+      isTouchDevice: this.isTouchDevice
     });
+  }
+}
+
+/* ===== MOBILE TAP HANDLER ===== */
+class MobileTapHandler {
+  constructor() {
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
+    this.tapStartTime = 0;
+    this.tapStartX = 0;
+    this.tapStartY = 0;
+    this.tapThreshold = 10; // pixels
+    this.tapTimeThreshold = 300; // milliseconds
+    
+    this.init();
+  }
+  
+  init() {
+    if (!this.isTouchDevice) return;
+    
+    console.log('Initializing mobile tap handler');
+    
+    // Add mobile tap instruction
+    this.showTapInstruction();
+    
+    // Video background tap handler
+    const videoBackground = document.getElementById('videoBackground');
+    if (videoBackground) {
+      videoBackground.addEventListener('touchstart', this.handleVideoTapStart.bind(this), { passive: true });
+      videoBackground.addEventListener('touchend', this.handleVideoTapEnd.bind(this), { passive: true });
+    }
+    
+    // Band item tap handler
+    document.addEventListener('touchstart', this.handleBandTapStart.bind(this), { passive: true });
+    document.addEventListener('touchend', this.handleBandTapEnd.bind(this), { passive: true });
+  }
+  
+  handleVideoTapStart(e) {
+    const touch = e.touches[0];
+    this.tapStartTime = Date.now();
+    this.tapStartX = touch.clientX;
+    this.tapStartY = touch.clientY;
+  }
+  
+  handleVideoTapEnd(e) {
+    const touch = e.changedTouches[0];
+    const tapDuration = Date.now() - this.tapStartTime;
+    const deltaX = Math.abs(touch.clientX - this.tapStartX);
+    const deltaY = Math.abs(touch.clientY - this.tapStartY);
+    
+    // Cek jika ini tap yang valid (bukan scroll)
+    if (tapDuration < this.tapTimeThreshold && deltaX < this.tapThreshold && deltaY < this.tapThreshold) {
+      e.preventDefault();
+      this.openInfoOverlay();
+    }
+  }
+  
+  handleBandTapStart(e) {
+    if (e.target.classList.contains('band-item')) {
+      const touch = e.touches[0];
+      this.tapStartTime = Date.now();
+      this.tapStartX = touch.clientX;
+      this.tapStartY = touch.clientY;
+    }
+  }
+  
+  handleBandTapEnd(e) {
+    if (e.target.classList.contains('band-item')) {
+      const touch = e.changedTouches[0];
+      const tapDuration = Date.now() - this.tapStartTime;
+      const deltaX = Math.abs(touch.clientX - this.tapStartX);
+      const deltaY = Math.abs(touch.clientY - this.tapStartY);
+      
+      // Cek jika ini tap yang valid (bukan scroll)
+      if (tapDuration < this.tapTimeThreshold && deltaX < this.tapThreshold && deltaY < this.tapThreshold) {
+        e.preventDefault();
+        this.handleBandTap(e.target);
+      }
+    }
+  }
+  
+  handleBandTap(bandElement) {
+    const youtubeUrl = bandElement.getAttribute('data-youtube');
+    if (youtubeUrl) {
+      // Buka YouTube link di new tab
+      window.open(youtubeUrl, '_blank');
+    }
+    
+    // Juga tampilkan media band
+    this.showBandMedia(bandElement);
+  }
+  
+  showBandMedia(item) {
+    const bandName = item.getAttribute('data-band');
+    const imagePath = item.getAttribute('data-image');
+    const gifPath = item.getAttribute('data-gif');
+    
+    const bandImageContainer = document.getElementById('bandImageContainer');
+    const bandGifBackground = document.getElementById('bandGifBackground');
+    
+    if (!bandImageContainer || !bandGifBackground) return;
+    
+    // Tampilkan band image container
+    bandImageContainer.classList.add('show');
+    
+    let bandImage = bandImageContainer.querySelector('.band-image');
+    if (!bandImage) {
+      bandImage = document.createElement('img');
+      bandImage.className = 'band-image';
+      bandImageContainer.appendChild(bandImage);
+    }
+    
+    bandImage.src = imagePath;
+    bandImage.alt = bandName.toUpperCase();
+    
+    const placeholder = bandImageContainer.querySelector('.band-image-placeholder');
+    if (placeholder) {
+      placeholder.style.display = 'none';
+    }
+    
+    bandImage.classList.add('active');
+    
+    // Tampilkan band gif background
+    bandGifBackground.classList.add('show');
+    
+    let bandGif = bandGifBackground.querySelector('.band-gif');
+    if (!bandGif) {
+      bandGif = document.createElement('img');
+      bandGif.className = 'band-gif';
+      bandGifBackground.appendChild(bandGif);
+    }
+    
+    bandGif.src = gifPath;
+    bandGif.alt = `${bandName} GIF`;
+    
+    const gifPlaceholder = bandGifBackground.querySelector('.band-gif-placeholder');
+    if (gifPlaceholder) {
+      gifPlaceholder.style.display = 'none';
+    }
+    
+    bandGif.classList.add('active');
+  }
+  
+  openInfoOverlay() {
+    const infoOverlay = document.getElementById('infoOverlay');
+    if (infoOverlay && infoOverlay.getAttribute('aria-hidden') === 'true') {
+      // Hide tap instruction
+      this.hideTapInstruction();
+      
+      // Trigger open info overlay
+      const event = new Event('openInfoOverlay');
+      document.dispatchEvent(event);
+    }
+  }
+  
+  showTapInstruction() {
+    const instruction = document.getElementById('mobileTapInstruction');
+    if (instruction) {
+      setTimeout(() => {
+        instruction.classList.add('show');
+      }, 2000);
+    }
+  }
+  
+  hideTapInstruction() {
+    const instruction = document.getElementById('mobileTapInstruction');
+    if (instruction) {
+      instruction.classList.remove('show');
+    }
   }
 }
 
@@ -295,8 +514,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inisialisasi custom cursor
   const customCursor = new CustomCursor();
   
+  // Inisialisasi mobile tap handler
+  const mobileTapHandler = new MobileTapHandler();
+  
   // Simpan reference untuk akses dari console jika diperlukan
   window.customCursor = customCursor;
+  window.mobileTapHandler = mobileTapHandler;
 
   /* ELEMENTS */
   const dropBtn = document.getElementById('dropMomentBtn');
@@ -608,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentYear = '2023';
   let selectedBand = null;
   let strukScrollManager = null;
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
 
   /* DROP MOMENT STRUK FUNCTIONS */
   function initDropMomentStruk() {
@@ -697,6 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
              onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;background:rgba(255,0,124,0.1);border:1px dashed #ff007c;display:flex;align-items:center;justify-content:center;color:#ff007c;font-size:12px;\\'>${item.title}</div>'">
       `;
       
+      // PERBAIKAN: Gunakan click event untuk semua device
       strukItem.addEventListener('click', (e) => {
         e.stopPropagation();
         console.log('Clicked struk item:', item.title);
@@ -949,7 +1174,6 @@ document.addEventListener('DOMContentLoaded', () => {
   /* PERBAIKAN: Band hover effect dengan support untuk touch devices */
   function initBandHoverEffect() {
     const bandItems = document.querySelectorAll('.band-item');
-    const isMobile = window.innerWidth < 768;
     
     // Preload images untuk performa
     const preloadImages = {};
@@ -970,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     bandItems.forEach(item => {
       // Mouse events untuk desktop
-      if (!isMobile) {
+      if (!isTouchDevice) {
         item.addEventListener('mouseenter', (e) => {
           if (currentHoverTimeout) {
             clearTimeout(currentHoverTimeout);
@@ -983,19 +1207,23 @@ document.addEventListener('DOMContentLoaded', () => {
             hideBandMedia();
           }, 50);
         });
+      }
+      
+      // Click/tap events untuk semua device
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         
-        item.addEventListener('click', (e) => {
-          const youtubeUrl = item.getAttribute('data-youtube');
-          if (youtubeUrl) {
-            window.open(youtubeUrl, '_blank');
-          }
-        });
-      } else {
-        // Touch events untuk mobile
-        item.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          
+        const youtubeUrl = item.getAttribute('data-youtube');
+        if (youtubeUrl) {
+          window.open(youtubeUrl, '_blank');
+        }
+        
+        // Tampilkan media untuk band yang dipilih
+        showBandMedia(item);
+        
+        // Untuk mobile, tambah selected state
+        if (isTouchDevice) {
           // Hapus selected state dari semua band items
           bandItems.forEach(bandItem => {
             bandItem.classList.remove('selected');
@@ -1003,14 +1231,8 @@ document.addEventListener('DOMContentLoaded', () => {
           
           // Tambah selected state ke band yang diklik
           item.classList.add('selected');
-          
-          // Tampilkan media untuk band yang dipilih
-          showBandMedia(item);
-          
-          // Simpan band yang sedang dipilih
-          selectedBand = item;
-        });
-      }
+        }
+      });
     });
     
     function showBandMedia(item) {
@@ -1190,7 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* CLICK VIDEO CURSOR & BACKGROUND CLICK FUNCTIONALITY */
   function initClickVideoCursor() {
     // Hide cursor on mobile devices
-    if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    if (isTouchDevice) {
       clickVideoCursor.style.display = 'none';
       return;
     }
@@ -1236,29 +1458,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // CLICK BACKGROUND TO OPEN INFO OVERLAY
-    document.addEventListener('click', (e) => {
-      if (infoOverlay.classList.contains('active') || dropMomentStruk.classList.contains('active') || microMomentStruk.classList.contains('active')) {
-        return;
-      }
-      
-      const videoBackground = document.querySelector('.video-background');
-      const rect = videoBackground.getBoundingClientRect();
-      
-      if (e.clientX >= rect.left && e.clientX <= rect.right &&
-          e.clientY >= rect.top && e.clientY <= rect.bottom &&
-          clickVideoCursor.classList.contains('show')) {
-        e.preventDefault();
+    // CLICK BACKGROUND TO OPEN INFO OVERLAY - hanya untuk desktop
+    if (!isTouchDevice) {
+      document.addEventListener('click', (e) => {
+        if (infoOverlay.classList.contains('active') || dropMomentStruk.classList.contains('active') || microMomentStruk.classList.contains('active')) {
+          return;
+        }
         
-        // Show click effect
-        showClickEffect(e.clientX, e.clientY);
+        const videoBackground = document.querySelector('.video-background');
+        const rect = videoBackground.getBoundingClientRect();
         
-        // Open info overlay after effect
-        setTimeout(() => {
-          openInfoOverlay();
-        }, 300);
-      }
-    });
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom &&
+            clickVideoCursor.classList.contains('show')) {
+          e.preventDefault();
+          
+          // Show click effect
+          showClickEffect(e.clientX, e.clientY);
+          
+          // Open info overlay after effect
+          setTimeout(() => {
+            openInfoOverlay();
+          }, 300);
+        }
+      });
+    }
   }
 
   /* CLICK EFFECT FUNCTION */
@@ -1553,6 +1777,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Event listener untuk mobile tap ke info overlay
+  document.addEventListener('openInfoOverlay', () => {
+    openInfoOverlay();
+  });
+
   /* DATE & TIME */
   function two(n){ return n<10? '0'+n : String(n); }
   function updateDateTime(){
@@ -1619,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  console.log('Website initialized successfully with improved scroll functionality');
+  console.log('Website initialized successfully with improved mobile touch support');
 });
 
 // Helper function untuk debug
