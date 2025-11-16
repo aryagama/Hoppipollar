@@ -130,14 +130,6 @@ class CustomCursor {
     document.dispatchEvent(mouseEvent);
   }
   
-  showClickText() {
-    if (this.currentText !== 'CLICK') {
-      this.cursorText.textContent = '[CLICK]';
-      this.cursorText.classList.add('show');
-      this.currentText = 'CLICK';
-    }
-  }
-  
   hideText() {
     this.cursorText.classList.remove('show');
     this.cursorText.textContent = '';
@@ -157,6 +149,8 @@ class StrukScrollManager {
     this.scrollTop = 0;
     this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
     this.touchStartTime = 0;
+    this.lastTouchTime = 0;
+    this.touchMoveThreshold = 5; // pixels threshold untuk menentukan apakah ini scroll atau tap
     
     this.init();
   }
@@ -186,7 +180,7 @@ class StrukScrollManager {
       this.container.addEventListener('dblclick', this.centerView.bind(this));
     }
     
-    // Touch events untuk mobile - PERBAIKAN: Gunakan passive: true untuk performa
+    // PERBAIKAN UTAMA: Touch events yang lebih responsif
     this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
     this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
     this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
@@ -248,7 +242,10 @@ class StrukScrollManager {
     this.container.style.cursor = 'grab';
   }
   
+  // PERBAIKAN UTAMA: Touch handling yang lebih baik
   handleTouchStart(e) {
+    if (e.touches.length > 1) return; // Abaikan multi-touch
+    
     const touch = e.touches[0];
     this.startX = touch.clientX;
     this.startY = touch.clientY;
@@ -262,15 +259,15 @@ class StrukScrollManager {
   }
   
   handleTouchMove(e) {
-    if (!this.isDragging) return;
+    if (!this.isDragging || e.touches.length > 1) return;
     
     e.preventDefault();
     const touch = e.touches[0];
     const x = touch.clientX;
     const y = touch.clientY;
     
-    const walkX = (x - this.startX) * 2;
-    const walkY = (y - this.startY) * 2;
+    const walkX = (x - this.startX) * 2.5; // PERBAIKAN: Tingkatkan sensitivitas
+    const walkY = (y - this.startY) * 2.5;
     
     this.container.scrollLeft = this.scrollLeft - walkX;
     this.container.scrollTop = this.scrollTop - walkY;
@@ -280,6 +277,8 @@ class StrukScrollManager {
     this.startY = y;
     this.scrollLeft = this.container.scrollLeft;
     this.scrollTop = this.container.scrollTop;
+    
+    this.lastTouchTime = Date.now();
   }
   
   handleTouchEnd(e) {
@@ -287,9 +286,19 @@ class StrukScrollManager {
     
     // Cek jika ini tap (bukan scroll)
     const touchDuration = Date.now() - this.touchStartTime;
-    if (touchDuration < 200) {
-      // Ini adalah tap, biarkan event click biasa menanganinya
-      return;
+    const isTap = touchDuration < 200 && 
+                  Math.abs(this.container.scrollLeft - this.scrollLeft) < this.touchMoveThreshold &&
+                  Math.abs(this.container.scrollTop - this.scrollTop) < this.touchMoveThreshold;
+    
+    if (isTap && e.changedTouches.length === 1) {
+      const touch = e.changedTouches[0];
+      const tappedElement = document.elementFromPoint(touch.clientX, touch.clientY);
+      
+      if (tappedElement && tappedElement.closest('.struk-item-transparent')) {
+        // Trigger click event pada struk item
+        const strukItem = tappedElement.closest('.struk-item-transparent');
+        strukItem.click();
+      }
     }
   }
   
@@ -326,18 +335,114 @@ class StrukScrollManager {
       hint.classList.remove('show');
     }
   }
+}
+
+/* ===== SWIPE HANDLER UNTUK INFO OVERLAY ===== */
+class SwipeHandler {
+  constructor() {
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
+    this.startX = 0;
+    this.startY = 0;
+    this.swipeThreshold = 50; // Minimum swipe distance
+    this.swipeTimeout = null;
+    
+    this.init();
+  }
   
-  // Method untuk debug
-  debug() {
-    console.log('Scroll Container Debug:', {
-      container: this.container,
-      scrollWidth: this.container.scrollWidth,
-      scrollHeight: this.container.scrollHeight,
-      clientWidth: this.container.clientWidth,
-      clientHeight: this.container.clientHeight,
-      scrollable: this.container.scrollWidth > this.container.clientWidth || this.container.scrollHeight > this.container.clientHeight,
-      isTouchDevice: this.isTouchDevice
-    });
+  init() {
+    if (!this.isTouchDevice) return;
+    
+    console.log('Initializing swipe handler for info overlay');
+    
+    const videoBackground = document.getElementById('videoBackground');
+    if (videoBackground) {
+      videoBackground.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+      videoBackground.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+      videoBackground.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
+    }
+  }
+  
+  handleTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    
+    const touch = e.touches[0];
+    this.startX = touch.clientX;
+    this.startY = touch.clientY;
+    
+    // Clear any existing timeout
+    if (this.swipeTimeout) {
+      clearTimeout(this.swipeTimeout);
+      this.swipeTimeout = null;
+    }
+  }
+  
+  handleTouchMove(e) {
+    if (e.touches.length !== 1) return;
+    
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - this.startX);
+    const deltaY = Math.abs(touch.clientY - this.startY);
+    
+    // Jika user mulai swipe secara signifikan, batalkan kemungkinan tap
+    if (deltaX > 10 || deltaY > 10) {
+      if (this.swipeTimeout) {
+        clearTimeout(this.swipeTimeout);
+        this.swipeTimeout = null;
+      }
+    }
+  }
+  
+  handleTouchEnd(e) {
+    if (e.changedTouches.length !== 1) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - this.startX;
+    const deltaY = touch.clientY - this.startY;
+    
+    // Cek apakah ini swipe horizontal yang signifikan
+    if (Math.abs(deltaX) > this.swipeThreshold && Math.abs(deltaY) < this.swipeThreshold) {
+      // Swipe kiri atau kanan - buka info overlay dengan animasi
+      this.openInfoOverlayWithSwipe(deltaX > 0 ? 'right' : 'left');
+    } else {
+      // Jika bukan swipe signifikan, anggap sebagai tap
+      this.handleBackgroundTap();
+    }
+  }
+  
+  openInfoOverlayWithSwipe(direction) {
+    const infoOverlay = document.getElementById('infoOverlay');
+    if (infoOverlay && infoOverlay.getAttribute('aria-hidden') === 'true') {
+      // Tambah class untuk animasi berdasarkan arah swipe
+      infoOverlay.classList.add(`swipe-${direction}`);
+      
+      // Trigger open info overlay
+      const event = new Event('openInfoOverlay');
+      document.dispatchEvent(event);
+      
+      // Hapus class animasi setelah selesai
+      setTimeout(() => {
+        infoOverlay.classList.remove(`swipe-${direction}`);
+      }, 500);
+    }
+  }
+  
+  handleBackgroundTap() {
+    const infoOverlay = document.getElementById('infoOverlay');
+    const dropMomentStruk = document.getElementById('dropMomentStruk');
+    const microMomentStruk = document.getElementById('microMomentStruk');
+    
+    // Hanya buka info overlay jika tidak ada overlay lain yang aktif
+    if (infoOverlay && infoOverlay.getAttribute('aria-hidden') === 'true' &&
+        (!dropMomentStruk || dropMomentStruk.getAttribute('aria-hidden') === 'true') &&
+        (!microMomentStruk || microMomentStruk.getAttribute('aria-hidden') === 'true')) {
+      
+      // Gunakan timeout untuk memberikan feedback visual dulu
+      this.swipeTimeout = setTimeout(() => {
+        const event = new Event('openInfoOverlay');
+        document.dispatchEvent(event);
+        this.swipeTimeout = null;
+      }, 50);
+    }
   }
 }
 
@@ -362,36 +467,10 @@ class MobileTapHandler {
     // Add mobile tap instruction
     this.showTapInstruction();
     
-    // Video background tap handler
-    const videoBackground = document.getElementById('videoBackground');
-    if (videoBackground) {
-      videoBackground.addEventListener('touchstart', this.handleVideoTapStart.bind(this), { passive: true });
-      videoBackground.addEventListener('touchend', this.handleVideoTapEnd.bind(this), { passive: true });
-    }
-    
+    // Video background sudah ditangani oleh SwipeHandler
     // Band item tap handler
     document.addEventListener('touchstart', this.handleBandTapStart.bind(this), { passive: true });
     document.addEventListener('touchend', this.handleBandTapEnd.bind(this), { passive: true });
-  }
-  
-  handleVideoTapStart(e) {
-    const touch = e.touches[0];
-    this.tapStartTime = Date.now();
-    this.tapStartX = touch.clientX;
-    this.tapStartY = touch.clientY;
-  }
-  
-  handleVideoTapEnd(e) {
-    const touch = e.changedTouches[0];
-    const tapDuration = Date.now() - this.tapStartTime;
-    const deltaX = Math.abs(touch.clientX - this.tapStartX);
-    const deltaY = Math.abs(touch.clientY - this.tapStartY);
-    
-    // Cek jika ini tap yang valid (bukan scroll)
-    if (tapDuration < this.tapTimeThreshold && deltaX < this.tapThreshold && deltaY < this.tapThreshold) {
-      e.preventDefault();
-      this.openInfoOverlay();
-    }
   }
   
   handleBandTapStart(e) {
@@ -517,9 +596,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inisialisasi mobile tap handler
   const mobileTapHandler = new MobileTapHandler();
   
+  // PERBAIKAN UTAMA: Inisialisasi swipe handler
+  const swipeHandler = new SwipeHandler();
+
   // Simpan reference untuk akses dari console jika diperlukan
   window.customCursor = customCursor;
   window.mobileTapHandler = mobileTapHandler;
+  window.swipeHandler = swipeHandler;
 
   /* ELEMENTS */
   const dropBtn = document.getElementById('dropMomentBtn');
@@ -1777,7 +1860,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Event listener untuk mobile tap ke info overlay
+  // PERBAIKAN UTAMA: Event listener untuk swipe/tap ke info overlay
   document.addEventListener('openInfoOverlay', () => {
     openInfoOverlay();
   });
