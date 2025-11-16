@@ -12,7 +12,7 @@
 </head>
 <body>
   <!-- VIDEO BACKGROUND -->
-  <div class="video-background">
+  <div class="video-background" id="videoBackground">
     <video id="bgVideo" autoplay muted loop playsinline>
       <source src="VID/MAS2025.mp4" type="video/mp4">
       <source src="VID/MAS2024.mp4" type="video/mp4">
@@ -36,6 +36,11 @@
 
     <!-- Click Effect Overlay -->
     <div class="click-effect-overlay" id="clickEffectOverlay"></div>
+
+    <!-- Mobile Tap Instruction -->
+    <div class="mobile-tap-instruction" id="mobileTapInstruction">
+      <span>TAP ANYWHERE TO EXPLORE</span>
+    </div>
   </div>
 
   <!-- VIDEO CONTROLS (hidden by default) -->
@@ -136,7 +141,10 @@
         <span>CLOSE</span>
       </button>
       <div class="struk-instruction">
-        <span>Drag to explore • Click to interact</span>
+        <span>Drag to explore • Tap items to interact</span>
+      </div>
+      <div class="mobile-scroll-hint" id="mobileScrollHint">
+        <span>👆 Scroll with two fingers</span>
       </div>
     </div>
   </div>
@@ -177,7 +185,7 @@
     <!-- Band Image Display -->
     <div class="band-image-container" id="bandImageContainer">
       <div class="band-image-placeholder">
-        <span>HOVER BAND NAME TO SEE IMAGE</span>
+        <span>TAP BAND NAME TO SEE IMAGE</span>
       </div>
     </div>
 
