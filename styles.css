@@ -69,6 +69,37 @@ body{
   opacity: 1;
 }
 
+/* ===== CLICK EFFECT OVERLAY ===== */
+.click-effect-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.click-effect-overlay.active {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(255, 0, 124, 0.2) 0%, transparent 70%);
+  animation: clickRipple 0.6s ease-out forwards;
+}
+
+@keyframes clickRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
 /* ===== DROP MOMENT STRUK ===== */
 .drop-moment-struk {
   position: fixed;
@@ -194,7 +225,7 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 85;
+  z-index: 95;
   display: none;
   pointer-events: none;
 }
@@ -210,7 +241,7 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(2, 2, 2, 0.7);
+  background: rgba(2, 2, 2, 0.85);
   backdrop-filter: blur(2px);
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -220,6 +251,7 @@ body{
   opacity: 1;
 }
 
+/* PERBAIKAN UTAMA: Container scroll yang lebih baik */
 .struk-infinite-container {
   position: absolute;
   top: 0;
@@ -228,10 +260,14 @@ body{
   height: 100%;
   overflow: auto;
   padding: 20px;
-  /* PERBAIKAN SCROLL - Pastikan scroll bekerja */
+  /* PERBAIKAN SCROLL - Pastikan scroll bekerja di semua device */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   cursor: grab;
+}
+
+.struk-infinite-container:active {
+  cursor: grabbing;
 }
 
 /* HILANGKAN SCROLLBAR UNTUK SEMUA BROWSER */
@@ -244,15 +280,20 @@ body{
   scrollbar-width: none;
 }
 
+/* PERBAIKAN: Area scroll yang lebih besar dan responsif */
 .struk-scroll-area {
   position: relative;
-  min-width: 200%;
-  min-height: 200%;
-  padding: 50px;
+  min-width: 300%;
+  min-height: 300%;
+  padding: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
 }
 
 .struk-item-transparent {
-  position: absolute;
+  position: relative;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -261,6 +302,8 @@ body{
   transform: scale(0.8);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   pointer-events: auto;
+  margin: 20px;
+  flex-shrink: 0;
 }
 
 .struk-item-transparent.visible {
@@ -280,16 +323,60 @@ body{
   object-fit: contain;
   display: block;
   pointer-events: none;
+  border-radius: 4px;
+}
+
+/* Controls untuk Micro Moment Struk */
+.struk-controls {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  z-index: 96;
+  pointer-events: none;
+}
+
+.close-micro-struk {
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  padding: 10px 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.close-micro-struk:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.struk-instruction {
+  color: var(--text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 /* Ensure all buttons stay on top */
 .header,
-.info-btn,
 .video-controls,
 .timeline-popup,
 .info-panel,
 .info-overlay-close,
-.close-struk {
+.close-struk,
+.close-micro-struk {
   z-index: 100 !important;
 }
 
@@ -374,8 +461,8 @@ body{
   animation: typewriter-cursor 1s infinite;
 }
 
-/* Next Video Cursor */
-.next-video-cursor {
+/* Click Video Cursor */
+.click-video-cursor {
   position: absolute;
   z-index: 2;
   pointer-events: none;
@@ -386,11 +473,11 @@ body{
   justify-content: center;
 }
 
-.next-video-cursor.show {
+.click-video-cursor.show {
   opacity: 1;
 }
 
-.next-text {
+.click-text {
   color: var(--accent);
   padding: 8px 12px;
   font-size: 0.9rem;
@@ -686,95 +773,10 @@ body{
   to{ opacity:1; transform:translateX(0) }
 }
 
-/* ===== INFO button & panel ===== */
-.info-btn{
-  position:fixed;
-  right:30px;
-  bottom:20px;
-  border:1px solid var(--text);
-  background:transparent;
-  color:var(--text);
-  padding:8px 12px;
-  text-transform:uppercase;
-  letter-spacing:0.06em;
-  cursor:pointer;
-  z-index:70;
-  transition: all 0.2s ease;
-  font-family: "Roboto Mono", monospace;
-}
-.info-btn[aria-expanded="true"]{
-  background:var(--accent);
-  color:#000;
-  border-color:var(--accent);
-}
-.info-btn:focus{ outline:1px dashed var(--muted) }
-
-/* HILANGKAN INFO BUTTON SAAT INFO OVERLAY AKTIF */
-.info-btn.hidden {
-  display: none;
-}
-
-/* info panel */
+/* ===== INFO PANEL (DISEMBUNYIKAN) ===== */
 .info-panel{
-  position:fixed;
-  right:28px;
-  bottom:68px;
-  width:300px;
-  max-width:92vw;
-  background:rgba(8,8,8,0.98);
-  border:1px solid rgba(255,255,255,0.06);
-  padding:18px;
-  z-index:71;
-  display:none;
-  box-shadow:0 8px 30px rgba(0,0,0,0.6);
-  color:var(--text);
-  font-family: "Roboto Mono", monospace;
+  display: none !important;
 }
-.info-panel[aria-hidden="false"]{ display:block }
-
-.close-info{
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:none;
-  border:none;
-  color:var(--text);
-  font-size:18px;
-  cursor:pointer;
-  padding:4px 8px;
-  transition:color 0.2s ease;
-}
-.close-info:hover{ color:var(--accent) }
-
-/* Social Media Buttons */
-.social-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.social-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--text);
-  background: transparent;
-  color: var(--text);
-  transition: all 0.2s ease;
-  border-radius: 2px;
-}
-
-.social-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-
-/* small helper: INFO button hover */
-.info-btn:hover{ border-color:var(--accent) }
 
 /* ===== INFO OVERLAY (FULLSCREEN) ===== */
 .info-overlay {
@@ -1288,6 +1290,17 @@ body{
     left: 20px;
     top: 68px;
   }
+  
+  /* Micro Moment Struk untuk Tablet */
+  .struk-scroll-area {
+    min-width: 250%;
+    min-height: 250%;
+    padding: 80px;
+  }
+  
+  .struk-controls {
+    padding: 0 20px;
+  }
 }
 
 /* ===== PERBAIKAN KHUSUS UNTUK MOBILE (767px ke bawah) ===== */
@@ -1391,29 +1404,6 @@ body{
     font-size: 0.75rem;
   }
   
-  .info-btn {
-    right: 16px;
-    bottom: 16px;
-    padding: 6px 10px;
-    font-size: 0.8rem;
-  }
-  
-  .info-panel {
-    right: 16px;
-    bottom: 56px;
-    width: 280px;
-    padding: 15px;
-  }
-  
-  .social-buttons {
-    gap: 8px;
-  }
-  
-  .social-btn {
-    width: 36px;
-    height: 36px;
-  }
-  
   /* ===== PERBAIKAN UTAMA: FIXED HEADER CONTENT UNTUK MOBILE - RATA KIRI ===== */
   .info-overlay {
     overflow-y: auto;
@@ -1474,89 +1464,84 @@ body{
   }
 
   /* ===== PERUBAHAN UTAMA: SEMUA ELEMEN RATA KIRI ===== */
-/* Title - Fixed Position - RATA KIRI */
-.zigzag-title .zigzag-item {
-    text-align: left !important;
-    position: fixed !important;
-    top: 80px !important;
-    left: 16px !important;
-    right: 16px !important;
-    transform: none !important;
-    z-index: 82 !important;
-    padding: 30px 20px !important;
-    margin: -25px !important;
-}
+  /* Title - Fixed Position - RATA KIRI */
+  .zigzag-title .zigzag-item {
+      text-align: left !important;
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      transform: none !important;
+      z-index: 82 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
 
-.zigzag-main-title {
-    font-size: 24px !important;
-    min-height: auto !important;
-    text-align: left !important;
-    line-height: 1.3 !important;
-    margin-bottom: 0 !important;
-    top: 50px;
-}
+  .zigzag-main-title {
+      font-size: 24px !important;
+      min-height: auto !important;
+      text-align: left !important;
+      line-height: 1.3 !important;
+      margin-bottom: 20px !important;
+  }
 
-.typing-text {
-    min-height: auto !important;
-    white-space: normal !important;
-    text-align: left !important;
-}
+  .typing-text {
+      min-height: auto !important;
+      white-space: normal !important;
+      text-align: left !important;
+  }
 
-/* Description - Fixed Position - RATA KIRI - INI YANG DIPERBAIKI */
-.zigzag-description .zigzag-item {
-    text-align: left !important;
-    position: fixed !important;
-    top: 160px !important; /* DIUBAH: 160px (80px lebih rendah dari title) */
-    left: 16px !important;
-    right: 16px !important;
-    transform: none !important;
-    z-index: 82 !important;
-    padding: 60px 0px !important;
-    margin: 0px !important;
-}
+  /* Description - RATA KIRI */
+  .zigzag-description .zigzag-item {
+      text-align: left !important;
+      margin-left: 0 !important;
+      max-width: 100% !important;
+      position: relative !important;
+      z-index: 82 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
 
-.zigzag-text {
-    font-size: 13px !important;
-    text-align: left !important;
-    line-height: 1.6 !important;
-    margin-bottom: 0 !important;
-}
+  .zigzag-text {
+      font-size: 13px !important;
+      text-align: left !important;
+      line-height: 1.6 !important;
+      margin-bottom: 30px !important;
+  }
 
-/* Band Title - Fixed Position - RATA KIRI */
-.zigzag-band-title .zigzag-item {
-    text-align: left !important;
-    position: fixed !important;
-    top: 260px !important; /* DIUBAH: 260px (100px lebih rendah dari description) */
-    left: 16px !important;
-    right: 16px !important;
-    transform: none !important;
-    z-index: 82 !important;
-    padding: 12px 0px !important;
-    margin: 0px !important;
-}
+  /* Band Title - RATA KIRI */
+  .zigzag-band-title .zigzag-item {
+      text-align: left !important;
+      position: relative !important;
+      max-width: 100% !important;
+      transform: none !important;
+      z-index: 82 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
 
-.zigzag-subtitle {
-    font-size: 14px !important;
-    margin-top: 150px !important;
-    text-align: left !important;
-}
+  .zigzag-subtitle {
+      font-size: 14px !important;
+      margin-top: 0 !important;
+      text-align: left !important;
+      margin-bottom: 20px !important;
+  }
 
   /* ===== BAGIAN YANG BISA BERGERAK/SCROLL ===== */
   /* Band List - Ini yang akan bergerak - RATA KIRI */
   .zigzag-band-list .zigzag-item {
     margin-left: 0 !important;
     max-width: 100% !important;
-    margin-top: 320px !important;
+    margin-top: 0 !important;
     margin-bottom: 100px !important;
     position: relative;
     z-index: 1;
     text-align: left !important;
-    padding: 0 16px !important;
+    padding: 0 !important;
   }
 
   /* Band List Grid - RATA KIRI */
   .band-list {
-    top: 120px;
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 8px 20px !important;
@@ -1638,6 +1623,53 @@ body{
     width: auto !important;
     opacity: 1 !important;
   }
+  
+  /* ===== PERBAIKAN KHUSUS UNTUK MICRO MOMENT STRUK DI MOBILE ===== */
+  .micro-moment-struk.active {
+    display: block;
+    pointer-events: auto;
+  }
+  
+  .struk-infinite-container {
+    padding: 10px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  .struk-scroll-area {
+    min-width: 200%;
+    min-height: 200%;
+    padding: 50px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+  }
+  
+  .struk-item-transparent {
+    margin: 10px;
+    width: 120px !important;
+    height: 80px !important;
+  }
+  
+  .struk-controls {
+    bottom: 20px;
+    padding: 0 16px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .close-micro-struk {
+    order: 2;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .struk-instruction {
+    order: 1;
+    text-align: center;
+    font-size: 11px;
+  }
 }
 
 /* Small Mobile (320px - 479px) */
@@ -1667,12 +1699,6 @@ body{
     font-size: 0.9rem;
   }
   
-  .info-panel {
-    width: 260px;
-    right: 12px;
-    bottom: 52px;
-  }
-  
   /* Perbaikan tambahan untuk mobile sangat kecil */
   .year-navigation-left {
     left: 12px !important;
@@ -1682,30 +1708,26 @@ body{
     margin-left: 60px !important;
   }
   
-  /* Adjust fixed positions untuk mobile kecil - RATA KIRI */
+  /* Adjust positions untuk mobile kecil - RATA KIRI */
   .zigzag-title .zigzag-item {
     left: 12px !important;
     transform: none !important;
-    top: 70px !important;
     width: calc(100% - 24px) !important;
   }
   
   .zigzag-description .zigzag-item {
     left: 12px !important;
     transform: none !important;
-    top: 140px !important;
     width: calc(100% - 24px) !important;
   }
   
   .zigzag-band-title .zigzag-item {
     left: 12px !important;
     transform: none !important;
-    top: 220px !important;
     width: calc(100% - 24px) !important;
   }
   
   .zigzag-band-list .zigzag-item {
-    margin-top: 280px !important;
     padding: 0 12px !important;
   }
 
@@ -1745,6 +1767,19 @@ body{
     width: 32px;
     height: 32px;
   }
+  
+  /* Micro Moment Struk untuk mobile kecil */
+  .struk-scroll-area {
+    min-width: 180%;
+    min-height: 180%;
+    padding: 30px 15px;
+  }
+  
+  .struk-item-transparent {
+    margin: 8px;
+    width: 100px !important;
+    height: 70px !important;
+  }
 }
 
 /* Touch Device Optimizations */
@@ -1762,11 +1797,11 @@ body{
   .music-control-btn:hover,
   .header-tagline:hover,
   .social-btn:hover,
-  .info-btn:hover,
   .timeline-btn:hover,
   .video-toggle:hover,
   .close-struk:hover,
-  .info-overlay-close:hover {
+  .info-overlay-close:hover,
+  .close-micro-struk:hover {
     transform: none;
   }
   
@@ -1774,8 +1809,14 @@ body{
     display: none;
   }
   
-  .next-video-cursor {
+  .click-video-cursor {
     display: none;
+  }
+  
+  /* Optimasi untuk touch scroll */
+  .struk-infinite-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }
 
@@ -1808,26 +1849,21 @@ body{
   }
   
   /* Adjust untuk landscape - RATA KIRI */
-  .zigzag-title .zigzag-item {
-    top: 50px !important;
-    left: 16px !important;
-    transform: none !important;
-  }
-  
-  .zigzag-description .zigzag-item {
-    top: 100px !important;
-    left: 16px !important;
-    transform: none !important;
-  }
-  
+  .zigzag-title .zigzag-item,
+  .zigzag-description .zigzag-item,
   .zigzag-band-title .zigzag-item {
-    top: 150px !important;
     left: 16px !important;
     transform: none !important;
   }
   
   .zigzag-band-list .zigzag-item {
-    margin-top: 200px !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Micro Moment Struk untuk landscape */
+  .struk-scroll-area {
+    min-height: 150%;
+    padding: 30px;
   }
 }
 
