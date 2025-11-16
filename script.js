@@ -42,14 +42,11 @@ class CustomCursor {
   }
   
   setupInteractiveElements() {
-    // Hapus semua event listener untuk [CLICK]
-    // Hanya pertahankan untuk elemen yang perlu [NEXT]
-    
-    // Untuk video background - tampilkan [NEXT]
+
     const videoBackground = document.querySelector('.video-background');
     if (videoBackground) {
       videoBackground.addEventListener('mouseenter', () => {
-        this.showNextText();
+        this.showClickText();
       });
       
       videoBackground.addEventListener('mouseleave', () => {
@@ -59,7 +56,6 @@ class CustomCursor {
     
     // Untuk elemen interaktif lainnya - tidak ada teks
     const interactiveElements = [
-      '.info-btn',
       '.info-overlay-close',
       '.social-btn',
       '.band-item',
@@ -70,7 +66,8 @@ class CustomCursor {
       '.video-toggle',
       'select',
       '.video-select',
-      '.close-struk'
+      '.close-struk',
+      '.close-micro-struk'
     ];
     
     interactiveElements.forEach(selector => {
@@ -100,9 +97,9 @@ class CustomCursor {
       return;
     }
     
-    // Cek jika berada di video background untuk menampilkan [NEXT]
+    // Cek jika berada di video background untuk menampilkan [CLICK]
     if (this.isOverVideoBackground(e.clientX, e.clientY)) {
-      this.showNextText();
+      this.showClickText();
     } else {
       this.hideText();
     }
@@ -132,143 +129,165 @@ class CustomCursor {
     document.dispatchEvent(mouseEvent);
   }
   
-  showNextText() {
-    if (this.currentText !== '') {
-      this.cursorText.textContent = '';
-      this.cursorText.setAttribute('data-type', 'next');
-      this.cursorText.classList.add('show');
-      this.currentText = '';
-    }
-  }
-  
   hideText() {
     this.cursorText.classList.remove('show');
-    this.cursorText.removeAttribute('data-type');
+    this.cursorText.textContent = '';
     this.currentText = '';
   }
 }
 
-/* ===== TRACKPAD FIXED SCROLL ===== */
-function enableStrukScroll() {
-  const strukContainer = document.querySelector('.struk-infinite-container');
-  
-  if (!strukContainer) {
-    console.error('Scroll container not found!');
-    return;
+/* ===== IMPROVED SCROLL FUNCTIONALITY ===== */
+class StrukScrollManager {
+  constructor() {
+    this.container = document.getElementById('strukInfiniteContainer');
+    this.scrollArea = document.getElementById('strukScrollArea');
+    this.isDragging = false;
+    this.startX = 0;
+    this.startY = 0;
+    this.scrollLeft = 0;
+    this.scrollTop = 0;
+    
+    this.init();
   }
-
-  console.log('Enabling trackpad scroll...');
-
-  // Pastikan container bisa scroll
-  strukContainer.style.overflow = 'auto';
-  strukContainer.style.cursor = 'grab';
-
-  // TRACKPAD & MOUSE WHEEL - Handle semua jenis wheel event
-  strukContainer.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    
-    // Faktor kecepatan berdasarkan deltaMode
-    let speedX = e.deltaX;
-    let speedY = e.deltaY;
-    
-    // Adjust speed untuk trackpad (deltaMode = 0) vs mouse wheel (deltaMode = 1)
-    if (e.deltaMode === 0) {
-      // Trackpad - pixels, kurangi speed
-      speedX *= 0.8;
-      speedY *= 0.8;
-    } else {
-      // Mouse wheel - lines, tingkatkan speed
-      speedX *= 30;
-      speedY *= 30;
+  
+  init() {
+    if (!this.container) {
+      console.error('Scroll container not found!');
+      return;
     }
     
-    console.log('Wheel event:', {
-      deltaX: e.deltaX,
-      deltaY: e.deltaY,
-      deltaMode: e.deltaMode,
-      adjustedX: speedX,
-      adjustedY: speedY
-    });
+    console.log('Initializing improved scroll functionality...');
     
-    strukContainer.scrollBy({
-      left: speedX,
-      top: speedY,
+    // Enable scroll untuk semua device
+    this.container.style.overflow = 'auto';
+    this.container.style.cursor = 'grab';
+    
+    // Mouse wheel/trackpad events
+    this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+    
+    // Mouse drag events
+    this.container.addEventListener('mousedown', this.handleMouseDown.bind(this));
+    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    
+    // Touch events untuk mobile
+    this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+    this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+    this.container.addEventListener('touchend', this.handleTouchEnd.bind(this));
+    
+    // Double click untuk reset view
+    this.container.addEventListener('dblclick', this.centerView.bind(this));
+    
+    console.log('Scroll functionality initialized successfully');
+  }
+  
+  handleWheel(e) {
+    e.preventDefault();
+    
+    // Faktor kecepatan berdasarkan device
+    const isTrackpad = e.deltaMode === 0;
+    const speedFactor = isTrackpad ? 0.5 : 2;
+    
+    const deltaX = e.deltaX * speedFactor;
+    const deltaY = e.deltaY * speedFactor;
+    
+    this.container.scrollBy({
+      left: deltaX,
+      top: deltaY,
       behavior: 'smooth'
     });
-  }, { passive: false });
-
-  // DRAG SCROLL untuk trackpad yang tidak trigger wheel event
-  let isDragging = false;
-  let startX, startY, scrollLeft, scrollTop;
-
-  strukContainer.addEventListener('mousedown', (e) => {
+  }
+  
+  handleMouseDown(e) {
     // Jangan trigger drag jika klik pada struk item
     if (e.target.closest('.struk-item-transparent')) return;
     
-    isDragging = true;
-    startX = e.pageX - strukContainer.offsetLeft;
-    startY = e.pageY - strukContainer.offsetTop;
-    scrollLeft = strukContainer.scrollLeft;
-    scrollTop = strukContainer.scrollTop;
-    strukContainer.style.cursor = 'grabbing';
+    this.isDragging = true;
+    this.startX = e.pageX - this.container.offsetLeft;
+    this.startY = e.pageY - this.container.offsetTop;
+    this.scrollLeft = this.container.scrollLeft;
+    this.scrollTop = this.container.scrollTop;
+    this.container.style.cursor = 'grabbing';
     e.preventDefault();
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
+  }
+  
+  handleMouseMove(e) {
+    if (!this.isDragging) return;
     
     e.preventDefault();
-    const x = e.pageX - strukContainer.offsetLeft;
-    const y = e.pageY - strukContainer.offsetTop;
+    const x = e.pageX - this.container.offsetLeft;
+    const y = e.pageY - this.container.offsetTop;
     
-    const walkX = (x - startX) * 2; // Scroll speed
-    const walkY = (y - startY) * 2;
+    const walkX = (x - this.startX) * 2;
+    const walkY = (y - this.startY) * 2;
     
-    strukContainer.scrollLeft = scrollLeft - walkX;
-    strukContainer.scrollTop = scrollTop - walkY;
-  });
-
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    strukContainer.style.cursor = 'grab';
-  });
-
-  // TOUCH SUPPORT untuk laptop dengan touchscreen
-  strukContainer.addEventListener('touchstart', (e) => {
+    this.container.scrollLeft = this.scrollLeft - walkX;
+    this.container.scrollTop = this.scrollTop - walkY;
+  }
+  
+  handleMouseUp() {
+    this.isDragging = false;
+    this.container.style.cursor = 'grab';
+  }
+  
+  handleTouchStart(e) {
     const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
-    scrollLeft = strukContainer.scrollLeft;
-    scrollTop = strukContainer.scrollTop;
-    isDragging = true;
-  }, { passive: true });
-
-  strukContainer.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+    this.startX = touch.clientX;
+    this.startY = touch.clientY;
+    this.scrollLeft = this.container.scrollLeft;
+    this.scrollTop = this.container.scrollTop;
+    this.isDragging = true;
+  }
+  
+  handleTouchMove(e) {
+    if (!this.isDragging) return;
     
     e.preventDefault();
     const touch = e.touches[0];
     const x = touch.clientX;
     const y = touch.clientY;
     
-    const walkX = (x - startX) * 2;
-    const walkY = (y - startY) * 2;
+    const walkX = (x - this.startX) * 2;
+    const walkY = (y - this.startY) * 2;
     
-    strukContainer.scrollLeft = scrollLeft - walkX;
-    strukContainer.scrollTop = scrollTop - walkY;
+    this.container.scrollLeft = this.scrollLeft - walkX;
+    this.container.scrollTop = this.scrollTop - walkY;
     
     // Update position untuk continuous drag
-    startX = x;
-    startY = y;
-    scrollLeft = strukContainer.scrollLeft;
-    scrollTop = strukContainer.scrollTop;
-  }, { passive: false });
-
-  strukContainer.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-
-  console.log('Trackpad scroll enabled successfully');
+    this.startX = x;
+    this.startY = y;
+    this.scrollLeft = this.container.scrollLeft;
+    this.scrollTop = this.container.scrollTop;
+  }
+  
+  handleTouchEnd() {
+    this.isDragging = false;
+  }
+  
+  centerView() {
+    if (this.scrollArea) {
+      const centerX = (this.scrollArea.scrollWidth - this.container.clientWidth) / 2;
+      const centerY = (this.scrollArea.scrollHeight - this.container.clientHeight) / 2;
+      
+      this.container.scrollTo({
+        left: centerX,
+        top: centerY,
+        behavior: 'smooth'
+      });
+    }
+  }
+  
+  // Method untuk debug
+  debug() {
+    console.log('Scroll Container Debug:', {
+      container: this.container,
+      scrollWidth: this.container.scrollWidth,
+      scrollHeight: this.container.scrollHeight,
+      clientWidth: this.container.clientWidth,
+      clientHeight: this.container.clientHeight,
+      scrollable: this.container.scrollWidth > this.container.clientWidth || this.container.scrollHeight > this.container.clientHeight
+    });
+  }
 }
 
 // Inisialisasi efek ketika DOM siap
@@ -288,10 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateText = document.getElementById('dateText');
   const timeText = document.getElementById('timeText');
 
-  const infoBtn = document.getElementById('infoBtn');
-  const infoPanel = document.getElementById('infoPanel');
-  const closeInfo = document.getElementById('closeInfo');
-
   const datetime = document.getElementById('datetime');
 
   /* DROP MOMENT STRUK ELEMENTS */
@@ -301,6 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* MICRO MOMENT STRUK ELEMENTS */
   const microMomentStruk = document.getElementById('microMomentStruk');
+  const closeMicroStruk = document.getElementById('closeMicroStruk');
 
   /* INFO OVERLAY ELEMENTS */
   const infoOverlay = document.getElementById('infoOverlay');
@@ -317,7 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const videoToggle = document.getElementById('videoToggle');
   const videoSelect = document.getElementById('videoSelect');
   const videoTitle = document.getElementById('videoTitle');
-  const nextVideoCursor = document.getElementById('nextVideoCursor');
+  const clickVideoCursor = document.getElementById('clickVideoCursor');
+  const clickEffectOverlay = document.getElementById('clickEffectOverlay');
 
   /* MUSIC PLAYER ELEMENTS */
   const musicBtnCenter = document.getElementById('musicBtnCenter');
@@ -590,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let typingInterval = null;
   let currentYear = '2023';
   let selectedBand = null;
+  let strukScrollManager = null;
 
   /* DROP MOMENT STRUK FUNCTIONS */
   function initDropMomentStruk() {
@@ -607,11 +625,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openDropMomentStruk() {
     if (timeline.classList.contains('active')) closeTimeline();
-    if (infoPanel.getAttribute('aria-hidden') === 'false') toggleInfo(false);
     if (infoOverlay.getAttribute('aria-hidden') === 'false') closeInfoOverlay();
     if (microMomentStruk.getAttribute('aria-hidden') === 'false') closeMicroMomentStruk();
     
-    nextVideoCursor.classList.remove('show');
+    clickVideoCursor.classList.remove('show');
     
     dropMomentStruk.setAttribute('aria-hidden', 'false');
     setTimeout(() => {
@@ -646,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* MICRO MOMENT STRUK FUNCTIONS - IMPROVED */
   function initMicroMomentStruk() {
-    const strukContainer = document.querySelector('.struk-scroll-area');
+    const strukContainer = document.getElementById('strukScrollArea');
     
     if (!strukContainer) {
       console.error('Struk scroll area not found!');
@@ -655,12 +672,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     strukContainer.innerHTML = '';
 
+    // Layout yang lebih terorganisir untuk struk items
+    const gridSize = Math.ceil(Math.sqrt(microMomentData.length));
+    const itemSpacing = 300; // Jarak antara items
+    
     microMomentData.forEach((item, index) => {
       const strukItem = document.createElement('div');
       strukItem.className = 'struk-item-transparent';
       
-      const posX = Math.random() * 1200 + 50;
-      const posY = Math.random() * 800 + 50;
+      // Posisi grid yang teratur
+      const row = Math.floor(index / gridSize);
+      const col = index % gridSize;
+      
+      const posX = col * itemSpacing + 100;
+      const posY = row * itemSpacing + 100;
       
       strukItem.style.width = `${item.width}px`;
       strukItem.style.height = `${item.height}px`;
@@ -674,44 +699,36 @@ document.addEventListener('DOMContentLoaded', () => {
       
       strukItem.addEventListener('click', (e) => {
         e.stopPropagation();
-        console.log('Clicked:', item.title);
+        console.log('Clicked struk item:', item.title);
+        // Tambahkan efek klik atau interaksi lainnya di sini
+        strukItem.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+          strukItem.style.transform = 'scale(1)';
+        }, 300);
       });
       
       strukContainer.appendChild(strukItem);
     });
     
-    const closeOverlay = document.createElement('div');
-    closeOverlay.className = 'struk-close-overlay';
-    closeOverlay.addEventListener('click', closeMicroMomentStruk);
-    
-    const microMomentElement = document.getElementById('microMomentStruk');
-    const existingOverlay = microMomentElement.querySelector('.struk-close-overlay');
-    if (existingOverlay) {
-      existingOverlay.remove();
-    }
-    microMomentElement.appendChild(closeOverlay);
-    
-    console.log('Micro moment struk initialized with', microMomentData.length, 'items');
+    console.log('Micro moment struk initialized with', microMomentData.length, 'items in grid layout');
   }
 
   function openMicroMomentStruk() {
     if (timeline.classList.contains('active')) closeTimeline();
-    if (infoPanel.getAttribute('aria-hidden') === 'false') toggleInfo(false);
     if (infoOverlay.getAttribute('aria-hidden') === 'false') closeInfoOverlay();
     if (dropMomentStruk.getAttribute('aria-hidden') === 'false') closeDropMomentStruk();
     
-    nextVideoCursor.classList.remove('show');
+    clickVideoCursor.classList.remove('show');
     
-    const microMomentStruk = document.getElementById('microMomentStruk');
     microMomentStruk.setAttribute('aria-hidden', 'false');
     
     setTimeout(() => {
       microMomentStruk.classList.add('active');
       
-      setTimeout(() => {
-        enableStrukScroll();
-      }, 100);
+      // Inisialisasi scroll manager
+      strukScrollManager = new StrukScrollManager();
       
+      // Animasi masuk untuk struk items
       const strukItems = document.querySelectorAll('.struk-item-transparent');
       strukItems.forEach((item, index) => {
         setTimeout(() => {
@@ -719,18 +736,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 60 + 100);
       });
       
-      const scrollContainer = document.querySelector('.struk-infinite-container');
+      // Auto-center view setelah dibuka
       setTimeout(() => {
-        if (scrollContainer) {
-          scrollContainer.scrollTo({
-            top: scrollContainer.scrollHeight / 4,
-            left: scrollContainer.scrollWidth / 4,
-            behavior: 'smooth'
-          });
+        if (strukScrollManager) {
+          strukScrollManager.centerView();
         }
-      }, 300);
+      }, 500);
 
-      console.log('Micro moment struk opened');
+      console.log('Micro moment struk opened with improved scroll');
     }, 10);
   }
 
@@ -744,12 +757,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     setTimeout(() => {
-      const microMomentStruk = document.getElementById('microMomentStruk');
       microMomentStruk.classList.remove('active');
       
       setTimeout(() => {
         microMomentStruk.setAttribute('aria-hidden', 'true');
         dropBtn.focus();
+        
+        // Cleanup scroll manager
+        strukScrollManager = null;
       }, 300);
     }, strukItems.length * 20 + 100);
 
@@ -1112,13 +1127,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* INFO OVERLAY FUNCTIONS */
   function openInfoOverlay() {
     if (timeline.classList.contains('active')) closeTimeline();
-    if (infoPanel.getAttribute('aria-hidden') === 'false') toggleInfo(false);
     if (dropMomentStruk.getAttribute('aria-hidden') === 'false') closeDropMomentStruk();
     if (microMomentStruk.getAttribute('aria-hidden') === 'false') closeMicroMomentStruk();
     
-    nextVideoCursor.classList.remove('show');
-    
-    infoBtn.classList.add('hidden');
+    clickVideoCursor.classList.remove('show');
     
     resetOverlayState();
     
@@ -1148,8 +1160,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setTimeout(() => {
       infoOverlay.setAttribute('aria-hidden', 'true');
-      infoBtn.classList.remove('hidden');
-      infoBtn.focus();
     }, 400);
   }
 
@@ -1177,19 +1187,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* CUSTOM CURSOR FOR NEXT VIDEO */
-  function initNextVideoCursor() {
+  /* CLICK VIDEO CURSOR & BACKGROUND CLICK FUNCTIONALITY */
+  function initClickVideoCursor() {
     // Hide cursor on mobile devices
     if ('ontouchstart' in window || navigator.maxTouchPoints) {
-      nextVideoCursor.style.display = 'none';
+      clickVideoCursor.style.display = 'none';
       return;
     }
 
-    const elementsToHideCursor = ['button', 'select', 'a', '.info-overlay-close', '.info-overlay-social-btn', '.close-struk'];
+    const elementsToHideCursor = [
+      '.info-overlay-close',
+      '.social-btn',
+      '.band-item',
+      '.year-btn',
+      '.timeline-btn',
+      '.header-tagline',
+      '.music-control-btn',
+      '.video-toggle',
+      'select',
+      '.video-select',
+      '.close-struk',
+      '.close-micro-struk'
+    ];
 
     document.addEventListener('mousemove', (e) => {
       if (infoOverlay.classList.contains('active') || dropMomentStruk.classList.contains('active') || microMomentStruk.classList.contains('active')) {
-        nextVideoCursor.classList.remove('show');
+        clickVideoCursor.classList.remove('show');
         return;
       }
       
@@ -1205,14 +1228,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (shouldShowCursor) {
-        nextVideoCursor.style.left = `${e.clientX + 15}px`;
-        nextVideoCursor.style.top = `${e.clientY + 15}px`;
-        nextVideoCursor.classList.add('show');
+        clickVideoCursor.style.left = `${e.clientX + 15}px`;
+        clickVideoCursor.style.top = `${e.clientY + 15}px`;
+        clickVideoCursor.classList.add('show');
       } else {
-        nextVideoCursor.classList.remove('show');
+        clickVideoCursor.classList.remove('show');
       }
     });
 
+    // CLICK BACKGROUND TO OPEN INFO OVERLAY
     document.addEventListener('click', (e) => {
       if (infoOverlay.classList.contains('active') || dropMomentStruk.classList.contains('active') || microMomentStruk.classList.contains('active')) {
         return;
@@ -1223,11 +1247,31 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (e.clientX >= rect.left && e.clientX <= rect.right &&
           e.clientY >= rect.top && e.clientY <= rect.bottom &&
-          nextVideoCursor.classList.contains('show')) {
+          clickVideoCursor.classList.contains('show')) {
         e.preventDefault();
-        playNextVideo();
+        
+        // Show click effect
+        showClickEffect(e.clientX, e.clientY);
+        
+        // Open info overlay after effect
+        setTimeout(() => {
+          openInfoOverlay();
+        }, 300);
       }
     });
+  }
+
+  /* CLICK EFFECT FUNCTION */
+  function showClickEffect(x, y) {
+    clickEffectOverlay.style.left = `${x}px`;
+    clickEffectOverlay.style.top = `${y}px`;
+    clickEffectOverlay.style.transform = 'translate(-50%, -50%)';
+    
+    clickEffectOverlay.classList.add('active');
+    
+    setTimeout(() => {
+      clickEffectOverlay.classList.remove('active');
+    }, 600);
   }
 
   /* VIDEO TITLE DISPLAY */
@@ -1374,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* TYPEWRITER EFFECT FOR INITIAL LOAD */
   function initTypewriterEffect() {
     const textElements = document.querySelectorAll(
-      '.header-tagline span, .info-btn, .info-panel h3, .info-panel p'
+      '.header-tagline span, .info-panel h3, .info-panel p'
     );
     
     textElements.forEach(element => {
@@ -1386,7 +1430,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setTimeout(() => typeText('.header-tagline .line1', 0), 100);
     setTimeout(() => typeText('.header-tagline .line2', 0), 400);
-    setTimeout(() => typeText('.info-btn', 0), 700);
     
     setTimeout(() => {
       datetime.classList.add('loaded');
@@ -1461,7 +1504,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (timeline.classList.contains('active')) closeTimeline();
-      if (infoPanel.getAttribute('aria-hidden') === 'false') toggleInfo(false);
       if (infoOverlay.getAttribute('aria-hidden') === 'false') closeInfoOverlay();
       if (dropMomentStruk.getAttribute('aria-hidden') === 'false') closeDropMomentStruk();
       if (microMomentStruk.getAttribute('aria-hidden') === 'false') closeMicroMomentStruk();
@@ -1477,63 +1519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* INFO TOGGLE */
-  function toggleInfo(open) {
-    const isOpen = infoPanel.getAttribute('aria-hidden') === 'false';
-    const wantOpen = typeof open === 'boolean' ? open : !isOpen;
-    if (wantOpen) {
-      infoPanel.setAttribute('aria-hidden','false');
-      infoBtn.setAttribute('aria-expanded','true');
-      infoBtn.classList.add('active');
-      
-      const infoTitle = infoPanel.querySelector('h3');
-      const infoParagraphs = infoPanel.querySelectorAll('p');
-      
-      if (infoTitle) {
-        const originalTitle = infoTitle.getAttribute('data-original-text') || infoTitle.textContent;
-        infoTitle.textContent = '';
-        infoTitle.classList.add('typewriter-cursor');
-        typeInfoText(infoTitle, originalTitle, 0);
-      }
-      
-      infoParagraphs.forEach((p, index) => {
-        setTimeout(() => {
-          const originalText = p.getAttribute('data-original-text') || p.textContent;
-          p.textContent = '';
-          p.classList.add('typewriter-cursor');
-          typeInfoText(p, originalText, 0);
-        }, (index + 1) * 300);
-      });
-      
-      closeInfo.focus();
-    } else {
-      infoPanel.setAttribute('aria-hidden','true');
-      infoBtn.setAttribute('aria-expanded','false');
-      infoBtn.classList.remove('active');
-      infoBtn.focus();
-    }
-  }
-  
-  function typeInfoText(element, text, index) {
-    if (index < text.length) {
-      element.textContent += text.charAt(index);
-      setTimeout(() => typeInfoText(element, text, index + 1), 50);
-    } else {
-      element.classList.remove('typewriter-cursor');
-    }
-  }
-
   /* EVENT LISTENERS */
-  infoBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    openInfoOverlay();
-  });
-
-  closeInfo.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleInfo(false);
-  });
-
   infoOverlayClose.addEventListener('click', (e) => {
     e.stopPropagation();
     closeInfoOverlay();
@@ -1556,9 +1542,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.addEventListener('click', (e) => {
-    if (!infoPanel.contains(e.target) && e.target !== infoBtn) {
-      if (infoPanel.getAttribute('aria-hidden') === 'false') toggleInfo(false);
+  closeMicroStruk.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeMicroMomentStruk();
+  });
+
+  microMomentStruk.addEventListener('click', (e) => {
+    if (e.target === microMomentStruk) {
+      closeMicroMomentStruk();
     }
   });
 
@@ -1582,7 +1573,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* BLINK EFFECT */
   function initBlinkEffect() {
-    const buttons = document.querySelectorAll('.info-btn, .timeline-btn, .music-control-btn, .header-tagline, .video-toggle, .social-btn, .info-overlay-close, .info-overlay-social-btn, .close-struk');
+    const buttons = document.querySelectorAll('.timeline-btn, .music-control-btn, .header-tagline, .video-toggle, .social-btn, .info-overlay-close, .info-overlay-social-btn, .close-struk, .close-micro-struk');
     
     buttons.forEach(button => {
       button.addEventListener('mouseenter', () => {
@@ -1598,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize all effects
   initVideoControls();
   initMusicPlayer();
-  initNextVideoCursor();
+  initClickVideoCursor();
   initTypewriterEffect();
   initBlinkEffect();
   initZigzagAnimations();
@@ -1619,32 +1610,29 @@ document.addEventListener('DOMContentLoaded', () => {
     openMicroMomentStruk();
   };
 
-  // Debug function untuk trackpad
-  window.debugTrackpad = function() {
-    const container = document.querySelector('.struk-infinite-container');
-    container.addEventListener('wheel', (e) => {
-      console.log('Trackpad/Wheel Event:', {
-        deltaX: e.deltaX,
-        deltaY: e.deltaY,
-        deltaZ: e.deltaZ,
-        deltaMode: e.deltaMode,
-        type: e.type
-      });
-    }, { passive: true });
+  // Debug function untuk scroll manager
+  window.debugScroll = function() {
+    if (strukScrollManager) {
+      strukScrollManager.debug();
+    } else {
+      console.log('Scroll manager not initialized. Open Micro Moment first.');
+    }
   };
 
-  console.log('Website initialized successfully');
+  console.log('Website initialized successfully with improved scroll functionality');
 });
 
 // Helper function untuk debug
 function debugStrukScroll() {
   const container = document.querySelector('.struk-infinite-container');
   if (container) {
-    console.log('Scroll container found:', {
+    console.log('Scroll container debug:', {
       scrollWidth: container.scrollWidth,
       scrollHeight: container.scrollHeight,
       clientWidth: container.clientWidth,
       clientHeight: container.clientHeight,
+      scrollLeft: container.scrollLeft,
+      scrollTop: container.scrollTop,
       scrollable: container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight
     });
   } else {
