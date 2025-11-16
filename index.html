@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Microgram Alternative Stage</title>
-  <link rel="icon" href="ICON.png" type="image/">
+  <link rel="icon" href="/ICON.png" type="image/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
@@ -14,12 +14,12 @@
   <!-- VIDEO BACKGROUND -->
   <div class="video-background">
     <video id="bgVideo" autoplay muted loop playsinline>
-      <source src="MAS2025.mp4" type="video/mp4">
-      <source src="MAS2024.mp4" type="video/mp4">
-      <source src="MAS2024PT1.mp4" type="video/mpp4">
-      <source src="MAS2024PT2.mp4" type="video/mp4">
-      <source src="MAS2023.mp4" type="video/mp4">
-      <source src="MAS2022.mp4" type="video/mp4">
+      <source src="VID/MAS2025.mp4" type="video/mp4">
+      <source src="VID/MAS2024.mp4" type="video/mp4">
+      <source src="VID/MAS2024PT1.mp4" type="video/mp4">
+      <source src="VID/MAS2024PT2.mp4" type="video/mp4">
+      <source src="VID/MAS2023.mp4" type="video/mp4">
+      <source src="VID/MAS2022.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <div class="video-overlay"></div>
@@ -29,10 +29,13 @@
       <div class="video-title" id="videoTitle">MICROVERSE STAGE 2022</div>
     </div>
     
-    <!-- Next Video Cursor -->
-    <div class="next-video-cursor" id="nextVideoCursor">
-      <span class="next-text">[NEXT]</span>
+    <!-- Click Video Cursor -->
+    <div class="click-video-cursor" id="clickVideoCursor">
+      <span class="click-text">[CLICK]</span>
     </div>
+
+    <!-- Click Effect Overlay -->
+    <div class="click-effect-overlay" id="clickEffectOverlay"></div>
   </div>
 
   <!-- VIDEO CONTROLS (hidden by default) -->
@@ -43,11 +46,11 @@
       </svg>
     </button>
     <select id="videoSelect" class="video-select">
-      <option value="MAS2022.mp4">Video 1</option>
-      <option value="ALT STAGE 1.mp4">Video 2</option>
-      <option value="ALT VID 1.mp4">Video 3</option>
-      <option value="ALT VID 2.mp4">Video 4</option>
-      <option value="ALT VID 3.mp4">Video 5</option>
+      <option value="VID/MAS2022.mp4">Video 1</option>
+      <option value="VID/ALT STAGE 1.mp4">Video 2</option>
+      <option value="VID/ALT VID 1.mp4">Video 3</option>
+      <option value="VID/ALT VID 2.mp4">Video 4</option>
+      <option value="VID/ALT VID 3.mp4">Video 5</option>
     </select>
   </div>
 
@@ -61,13 +64,15 @@
     </div>
 
     <div class="header-center">
+      <!-- Mobile Title -->
+      <div class="mobile-title">MICROGRAM ALTERNATIVE STAGE</div>
       
       <!-- MUSIC PLAYER CENTER - ONE LINE -->
       <div class="now-playing-center" id="nowPlayingCenter">
         <button id="musicBtnCenter" class="music-control-btn" aria-pressed="false" title="Play / Pause music">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path class="play-icon" d="M4 2v12l10-6z"/>
-            <path class="pause-icon" d="M4 2h3v12H4zM9 2h3v12H9z" style="display:none"/>
+            <path class="pause-icon" d="M2 2h4v12H2zM10 2h4v12h-4z" style="display:none"/>
           </svg>
         </button>
         <button id="nextMusicBtn" class="music-control-btn" title="Next track">
@@ -121,18 +126,23 @@
   <!-- MICRO MOMENT STRUK (IMPROVED VERSION) -->
   <div id="microMomentStruk" class="micro-moment-struk" aria-hidden="true">
     <div class="struk-overlay"></div>
-    <div class="struk-infinite-container">
-      <div class="struk-scroll-area">
+    <div class="struk-infinite-container" id="strukInfiniteContainer">
+      <div class="struk-scroll-area" id="strukScrollArea">
         <!-- Struk akan di-generate oleh JavaScript -->
+      </div>
+    </div>
+    <div class="struk-controls">
+      <button id="closeMicroStruk" class="close-micro-struk">
+        <span>CLOSE</span>
+      </button>
+      <div class="struk-instruction">
+        <span>Drag to explore • Click to interact</span>
       </div>
     </div>
   </div>
 
-  <!-- INFO button bottom-right -->
-  <button id="infoBtn" class="info-btn" aria-expanded="false">INFO</button>
-
-  <!-- INFO PANEL (toggle) -->
-  <aside id="infoPanel" class="info-panel" role="dialog" aria-hidden="true" aria-label="Informasi">
+  <!-- INFO PANEL (toggle) - DIBUAT TETAP ADA TAPI TIDAK DIPAKAI -->
+  <aside id="infoPanel" class="info-panel" role="dialog" aria-hidden="true" aria-label="Informasi" style="display: none;">
     <button id="closeInfo" class="close-info" aria-label="Close info">&times;</button>
     <h3>ALTERNATIVE STAGE</h3>
     <p>Tiny sounds with bold presence.</p>
