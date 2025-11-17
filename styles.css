@@ -309,13 +309,10 @@ body{
   overflow: auto;
   padding: 20px;
   /* PERBAIKAN SCROLL - Pastikan scroll bekerja di semua device */
-  -webkit-overflow-scrolling: touch !important;
-  scroll-behavior: smooth !important;
-  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   cursor: grab;
   touch-action: pan-x pan-y;
-  transform: translateZ(0);
-  will-change: transform;
 }
 
 .struk-infinite-container:active {
@@ -480,7 +477,6 @@ body{
   z-index: -1;
   overflow: hidden;
   cursor: pointer;
-  touch-action: pan-x pan-y;
 }
 
 .video-background video {
@@ -489,9 +485,6 @@ body{
   object-fit: cover;
   opacity: 0.7;
   transition: opacity 0.5s ease;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000;
 }
 
 .video-overlay {
@@ -525,8 +518,6 @@ body{
   font-family: "Roboto Mono", monospace;
   color: var(--text);
   padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.2);
   display: inline-block;
   opacity: 0;
   transform: translateY(10px);
@@ -880,37 +871,6 @@ body{
   align-items: center;
   justify-content: center;
   opacity: 1;
-}
-
-/* PERBAIKAN SWIPE ANIMATION UNTUK INFO OVERLAY */
-.info-overlay.swipe-left {
-  animation: slideInFromLeft 0.5s ease-out;
-}
-
-.info-overlay.swipe-right {
-  animation: slideInFromRight 0.5s ease-out;
-}
-
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromRight {
-  0% {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 /* Year Navigation - Samping Kiri - PERBAIKAN: Tanpa scroll */
@@ -1407,19 +1367,13 @@ body{
   
   /* Micro Moment Struk untuk Tablet */
   .struk-scroll-area {
-    min-width: 280% !important;
-    min-height: 280% !important;
-    padding: 90px !important;
+    min-width: 250%;
+    min-height: 250%;
+    padding: 80px;
   }
   
   .struk-controls {
     padding: 0 20px;
-  }
-  
-  .struk-item-transparent {
-    margin: 15px !important;
-    width: 140px !important;
-    height: 100px !important;
   }
 }
 
@@ -1685,7 +1639,6 @@ body{
     position: relative;
     width: 100%;
     -webkit-tap-highlight-color: rgba(255, 0, 124, 0.2);
-    transition: transform 0.2s ease !important;
   }
   
   /* Selected state untuk band items */
@@ -1755,16 +1708,16 @@ body{
   }
   
   .struk-infinite-container {
-    padding: 10px !important;
+    padding: 10px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    touch-action: pan-x pan-y !important;
+    touch-action: pan-x pan-y;
   }
   
   .struk-scroll-area {
-    min-width: 220% !important;
-    min-height: 220% !important;
-    padding: 40px 20px !important;
+    min-width: 200%;
+    min-height: 200%;
+    padding: 50px 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -1772,15 +1725,10 @@ body{
   }
   
   .struk-item-transparent {
-    margin: 8px !important;
-    width: 110px !important;
-    height: 75px !important;
+    margin: 10px;
+    width: 120px !important;
+    height: 80px !important;
     -webkit-tap-highlight-color: rgba(255, 0, 124, 0.2);
-    transition: transform 0.2s ease !important;
-  }
-  
-  .struk-item-transparent:active {
-    transform: scale(0.95) !important;
   }
   
   .struk-controls {
@@ -1918,13 +1866,13 @@ body{
   
   /* Micro Moment Struk untuk mobile kecil */
   .struk-scroll-area {
-    min-width: 200% !important;
-    min-height: 200% !important;
-    padding: 30px 15px !important;
+    min-width: 180%;
+    min-height: 180%;
+    padding: 30px 15px;
   }
   
   .struk-item-transparent {
-    margin: 8px !important;
+    margin: 8px;
     width: 100px !important;
     height: 70px !important;
   }
@@ -1979,18 +1927,9 @@ body{
   /* Touch feedback yang lebih baik */
   .band-item:active,
   .struk-item-transparent:active,
-  .close-micro-struk:active,
-  .info-overlay-close:active,
-  .music-control-btn:active,
-  .header-tagline:active {
-    background-color: rgba(255, 0, 124, 0.1) !important;
-    transition: background-color 0.1s ease;
-  }
-  
-  .year-btn:active {
-    opacity: 1 !important;
-    color: var(--accent) !important;
-    transform: rotate(180deg) scale(1.1) !important;
+  .close-micro-struk:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
   }
 }
 
