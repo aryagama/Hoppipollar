@@ -4,6 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Microgram Alternative Stage</title>
+  <meta name="Description" content="" />
+  <meta name="keywords" content="Alternative Stage, music event, micro moment, alt event, indie stage, 2025 event, experimental stage">
+  <meta name="author" content="Alternative Stage Creative Team">
+
+  <meta property="og:title" content="Alternative Stage 2025 — Micro Moment Experience">
+  <meta property="og:description" content="Event alternatif dengan konsep intimate dan immersive. Dibangun untuk meninggalkan micro moment yang berkesan.">
+  <meta property="og:image" content="https://alternativestage.site/thumbnail.jpg">
+  <meta property="og:url" content="https://alternativestage.site">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alternative Stage 2025 — Micro Moment Experience">
+  <meta name="twitter:description" content="Event alternatif dengan konsep intimate dan immersive.">
+  <meta name="twitter:image" content="https://alternativestage.site/thumbnail.jpg">
+
+  <meta name="robots" content="index, follow">
+
   <link rel="icon" href="/ICON.png" type="image/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,12 +31,12 @@
   <!-- VIDEO BACKGROUND -->
   <div class="video-background" id="videoBackground">
     <video id="bgVideo" autoplay muted loop playsinline>
-      <source src="MAS2025.mp4" type="video/mp4">
-      <source src="MAS2024.mp4" type="video/mp4">
-      <source src="VMAS2024PT1.mp4" type="video/mp4">
-      <source src="MAS2024PT2.mp4" type="video/mp4">
-      <source src="MAS2023.mp4" type="video/mp4">
-      <source src="MAS2022.mp4" type="video/mp4">
+      <source src="VID/MAS2025.mp4" type="video/mp4">
+      <source src="VID/MAS2024.mp4" type="video/mp4">
+      <source src="VID/MAS2024PT1.mp4" type="video/mp4">
+      <source src="VID/MAS2024PT2.mp4" type="video/mp4">
+      <source src="VID/MAS2023.mp4" type="video/mp4">
+      <source src="VID/MAS2022.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <div class="video-overlay"></div>
@@ -37,6 +54,15 @@
     <!-- Click Effect Overlay -->
     <div class="click-effect-overlay" id="clickEffectOverlay"></div>
 
+    <!-- Mobile Tap Instruction -->
+    <div class="mobile-tap-instruction" id="mobileTapInstruction">
+      <span>SWIPE OR TAP TO EXPLORE</span>
+    </div>
+
+    <!-- Swipe Overlay untuk Info Page -->
+    <div class="swipe-overlay" id="swipeOverlay"></div>
+  </div>
+
   <!-- VIDEO CONTROLS (hidden by default) -->
   <div class="video-controls">
     <button id="videoToggle" class="video-toggle" title="Toggle video background">
@@ -45,11 +71,11 @@
       </svg>
     </button>
     <select id="videoSelect" class="video-select">
-      <option value="MAS2022.mp4">Video 1</option>
-      <option value="ALT STAGE 1.mp4">Video 2</option>
-      <option value="ALT VID 1.mp4">Video 3</option>
-      <option value="ALT VID 2.mp4">Video 4</option>
-      <option value="ALT VID 3.mp4">Video 5</option>
+      <option value="VID/MAS2022.mp4">Video 1</option>
+      <option value="VID/ALT STAGE 1.mp4">Video 2</option>
+      <option value="VID/ALT VID 1.mp4">Video 3</option>
+      <option value="VID/ALT VID 2.mp4">Video 4</option>
+      <option value="VID/ALT VID 3.mp4">Video 5</option>
     </select>
   </div>
 
@@ -135,10 +161,10 @@
         <span>CLOSE</span>
       </button>
       <div class="struk-instruction">
-        <span>Drag to explore • Tap items to interact</span>
+        <span>Swipe to explore • Tap items to interact</span>
       </div>
       <div class="mobile-scroll-hint" id="mobileScrollHint">
-        <span>Scroll and tab object</span>
+        <span>👆 Swipe with one finger</span>
       </div>
     </div>
   </div>
